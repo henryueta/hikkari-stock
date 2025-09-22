@@ -1,11 +1,15 @@
 import App from '../App'
 import { createBrowserRouter } from 'react-router-dom'
 import Auth from './auth'
+import Private from './private'
 
 const router_list = createBrowserRouter([
   {
     path:"/",
-    element:<App/>
+    element:
+    <Private>
+      <App/>
+    </Private>
   },
   {
     path:"/Auth",

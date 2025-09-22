@@ -1,7 +1,6 @@
 import type { UseFormRegister } from "react-hook-form"
 import type { FormItemType } from "../@types/form"
 import FormWarn from "./FormWarn"
-import styles from "./index.module.css"
 
 const FormField = ({properties,register,warn}:
     {
@@ -37,7 +36,6 @@ const FormField = ({properties,register,warn}:
             &&
             <FormWarn
                 message={warn}
-                styles={styles}
             />
         }
     </div>

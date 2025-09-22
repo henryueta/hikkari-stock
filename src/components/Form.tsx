@@ -3,7 +3,14 @@ import type { ModelType } from "../@types/model";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormField from "./FormField";
 
-const Form = ({model}:{model:ModelType}) => {
+const Form = ({model,submit}:
+  {
+    model:ModelType,
+    submit:{
+      title:string,
+      onAction?:(data:Record<string, unknown>)=>void
+    }
+  }) => {
 
     const {register,formState,handleSubmit} = useForm({
       mode:"all",
@@ -14,7 +21,14 @@ const Form = ({model}:{model:ModelType}) => {
     const {errors} = formState;
 
   return (
-    <form>
+    <form onSubmit={handleSubmit((data)=>{
+      !!submit.onAction
+      &&
+      submit.onAction(data)
+      
+      console.log(data)
+
+    })}>
       {
         model.form.map((field)=>
           <FormField
@@ -25,6 +39,10 @@ const Form = ({model}:{model:ModelType}) => {
           />
         )
       }
+      <button
+      >
+        {submit.title}
+      </button>
     </form>
   )
 }
