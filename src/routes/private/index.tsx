@@ -1,15 +1,22 @@
 import { Navigate } from "react-router-dom";
 import useHandleAuth from "../../hooks/useHandleAuth"
 import type { ChildrenType } from "../../@types/children";
+import { useEffect } from "react";
 
 const Private = ({children}:ChildrenType) => {
 
-    const {currentAuthContext} = useHandleAuth();
+    const {currentAuthContext,onCheckLocalToken,isChecking} = useHandleAuth();
+
+    useEffect(()=>{
+
+      onCheckLocalToken();
+
+    },[]);
 
   return (
-            currentAuthContext.isAuth !== null
+            (isChecking !== null)
             &&
-            !currentAuthContext.isAuth
+            !currentAuthContext.auth
             ?
             <Navigate to={"/auth"}/>
             :

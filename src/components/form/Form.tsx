@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
-import type { ModelType } from "../@types/model";
+import type { ModelType } from "../../@types/model";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FormField from "./FormField";
+import FormField from "../form-field";
 
 const Form = ({model,submit}:
   {

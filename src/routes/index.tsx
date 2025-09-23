@@ -1,4 +1,4 @@
-import App from '../App'
+import Home from './home'
 import { createBrowserRouter } from 'react-router-dom'
 import Auth from './auth'
 import Private from './private'
@@ -8,7 +8,7 @@ const router_list = createBrowserRouter([
     path:"/",
     element:
     <Private>
-      <App/>
+      <Home/>
     </Private>
   },
   {

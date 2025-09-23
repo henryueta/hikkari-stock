@@ -1,5 +1,5 @@
-import type { ComponentStyleType } from "../@types/style"
-import { onClassName } from "../functions/style"
+import type { ComponentStyleType } from "../../@types/style"
+import { onClassName } from "../../functions/style"
 
 const FormWarn = ({message,styles}:{message:string} & ComponentStyleType) => {
   

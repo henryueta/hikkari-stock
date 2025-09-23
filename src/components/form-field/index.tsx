@@ -1,6 +1,6 @@
 import type { UseFormRegister } from "react-hook-form"
-import type { FormItemType } from "../@types/form"
-import FormWarn from "./FormWarn"
+import type { FormItemType } from "../../@types/form"
+import FormWarn from "../form-warn"
 
 const FormField = ({properties,register,warn}:
     {
