@@ -23,6 +23,10 @@ const FormField = ({properties,register,warn}:FormFieldItemType
                 {...register(properties.registerId)}
                 >
                 </textarea>
+                    
+                
+                
+                
             }
         </label>
         {
@@ -31,6 +35,9 @@ const FormField = ({properties,register,warn}:FormFieldItemType
             <FormWarn
                 message={warn}
             />
+        }
+        {
+            properties.registerId
         }
     </div>
   )

@@ -1,6 +1,6 @@
 import type { NavList } from "../@types/nav";
 
-const nav_list:NavList = [
+const nav_item_list:NavList = [
     {
         label:"Produtos",
         redirectTo:""
@@ -15,4 +15,4 @@ const nav_list:NavList = [
     }
 ]
 
-export default nav_list
+export default nav_item_list

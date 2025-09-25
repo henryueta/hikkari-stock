@@ -5,7 +5,7 @@ import Model from "../classes/Model";
 
 const size_schema:SchemaType = z.object({
     name:z.string(),
-    
+    quantity:z.string()
 })
 
 const size_form:FormType = [
@@ -14,6 +14,13 @@ const size_form:FormType = [
         registerId:"name",
         tag:"input",
         title:"Nome",
+        type:"text"
+    },
+    {
+        id:"quantity_id",
+        registerId:"quantity",
+        tag:"input",
+        title:"Quantidade",
         type:"text"
     }
 ]

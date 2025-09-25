@@ -10,7 +10,13 @@ const Button = (
   return (
     <div className="buttonContainer">
         <button 
-        type={type}
+        type={
+          !!type
+          ?
+          type
+          :
+          "button"  
+        }
         onClick={onClick}>
             {title}
         </button>

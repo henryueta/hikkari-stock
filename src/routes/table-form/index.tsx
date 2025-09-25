@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import Form from "../../components/form/Form";
+import Form from "../../components/form";
 import { table_data_list } from "../../objects/table";
 import { useState } from "react";
 import type { ModelType } from "../../@types/model";

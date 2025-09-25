@@ -2,7 +2,7 @@ import z from "zod";
 import type { SchemaType } from "../@types/schema";
 import type { FormType } from "../@types/form";
 import Model from "../classes/Model";
-import { variation_schema } from "./variation";
+import { variation_form, variation_schema } from "./variation";
 
 const product_schema:SchemaType = z.object({
     description:z.string(),
@@ -29,9 +29,13 @@ const product_form:FormType = [
     {
         id:"variations_id",
         registerId:"variations",
-        tag:"select",
+        tag:"dialog",
         title:"Variações",
-        type:"text"
+        type:"text",
+        modelBody:{
+            form:variation_form,
+            schema:variation_schema
+        }
     }
 ]
 

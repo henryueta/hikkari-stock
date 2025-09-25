@@ -1,41 +1,59 @@
 import type { UseFieldArrayReturn } from "react-hook-form"
-import type z from "zod"
 import FormField from "../form-field"
-import type { FormFieldItemType } from "../../@types/form"
+import type { FormFieldItemType, FormType } from "../../@types/form"
+import type { ZodObject } from "zod"
 
-const FormFieldList = ({id,title,arrayFields,fieldSchema,actions,formField}:{
+const FormFieldList = (
+  {
+    id,
+    title,
+    arrayFields,
+    fieldSchema,
+    actions,
+    formContent,
+    fieldForm
+  }:{
     title:string,
     id:string,
     arrayFields:Record<"id", string>[],
-    formField:FormFieldItemType,
-    fieldSchema:z.ZodArray,
+    formContent:FormFieldItemType,
+    fieldSchema:ZodObject,
+    fieldForm:FormType
     actions:UseFieldArrayReturn
 }) => {
   return (
     <div className="formFieldList">
+      
         <label htmlFor={id}>
             <p>
-            {title}
+            {/* {title} */}
             </p>
         </label>
         {
             arrayFields.map((field_item,field_index)=>
                 {
-                    return <div className="fieldListItemContainer" key={field_index}>
+                    return <div className="fieldListItemContainer" key={field_item.id}>
                     {
-                        Object.entries(fieldSchema.element.shape).map(
+                        Object.entries(fieldSchema.shape).map(
                         ([key,_])=>(
                         <FormField
-                        register={formField.register}
-                        key={`${formField.properties.registerId}.${field_index}.${key}`}
+                        index={field_index}
+                        register={formContent.register}
+                        key={`${formContent.properties.registerId}.${field_index}.${key}`}
+                        identifier={formContent.properties.registerId}
                         properties={{   
-                          registerId: `${formField.properties.registerId}.${field_index}.${key}`,
-                          title: `${formField.properties.title} - ${key}`,
-                          id:field_item.id,
-                          tag:"input",
-                          type:formField.properties.type
+                          registerId: `${formContent.properties.registerId}.${field_index}.${key}`,
+                          title: `${formContent.properties.title} - ${key}`,
+                          id:`${formContent.properties.id} - ${key}`,
+                          tag:fieldForm[
+                            fieldForm.findIndex((form_item)=>
+                              form_item.registerId === key
+                            )
+                          ].tag,
+                          type:formContent.properties.type,
+                          modelBody:formContent.properties.modelBody
                         }}
-                        warn={formField.warn}
+                        warn={formContent.warn}
                       />
                             )
                         )
@@ -43,10 +61,10 @@ const FormFieldList = ({id,title,arrayFields,fieldSchema,actions,formField}:{
                 </div>}
             )
         }
-                     <button
+              <button
                 type="button"
                 onClick={() =>
-                  actions.append({}) // 👈 se quiser, pode passar um valor padrão aqui
+                  actions.append({}) 
                 }
               >
                 Adicionar

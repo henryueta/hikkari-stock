@@ -3,7 +3,7 @@ import api_endpoints from "../../config/api";
 import useHandleAxios from "../../hooks/useHandleAxios";
 import useHandleNavigate from "../../hooks/useHandleNavigate";
 import auth_model from "../../models/auth"
-import Form from "../form/Form"
+import Form from "../form"
 import useHandleToken from "../../hooks/useHandleToken";
 
 const Auth = () => {
