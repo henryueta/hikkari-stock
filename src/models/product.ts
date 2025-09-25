@@ -1,0 +1,44 @@
+import z from "zod";
+import type { SchemaType } from "../@types/schema";
+import type { FormType } from "../@types/form";
+import Model from "../classes/Model";
+import { variation_schema } from "./variation";
+
+const product_schema:SchemaType = z.object({
+    description:z.string(),
+    cod:z.string(),
+    variations:z.array(variation_schema)
+})
+
+
+const product_form:FormType = [
+    {
+        id:"description_id",
+        registerId:"description",
+        tag:"input",
+        type:"text",
+        title:"Descrição"
+    },
+    {
+        id:"cod_id",
+        registerId:"cod",
+        tag:"input",
+        title:"Código",
+        type:"text"
+    },
+    {
+        id:"variations_id",
+        registerId:"variations",
+        tag:"select",
+        title:"Variações",
+        type:"text"
+    }
+]
+
+const product_model = new Model(product_schema,product_form);
+
+export {
+    product_model,
+    product_schema,
+    product_form
+}

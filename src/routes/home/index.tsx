@@ -5,7 +5,7 @@ import styles from "./index.module.css"
 //produtos
 //vendas
 
-const Home = () => {
+const HomePage = () => {
   return (
     <>
         <NavBar/>
@@ -16,4 +16,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default HomePage

@@ -1,19 +1,24 @@
-import Home from './home'
+import HomePage from './home'
 import { createBrowserRouter } from 'react-router-dom'
 import Auth from './auth'
 import Private from './private'
+import TableFormPage from './table-form'
 
 const router_list = createBrowserRouter([
   {
     path:"/",
     element:
     <Private>
-      <Home/>
+      <HomePage/>
     </Private>
   },
   {
-    path:"/Auth",
+    path:"/auth",
     element:<Auth/>
+  },
+  {
+    path:"/:table/:type",
+    element:<TableFormPage/>
   }
 ])
 
