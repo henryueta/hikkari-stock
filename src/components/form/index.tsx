@@ -5,11 +5,14 @@ import z from "zod";
 import FormStructure from "../form-structure";
 import Dialog from "../dialog";
 import { useState } from "react";
+import type { DefaultFormValues, FormMethodType } from "../../@types/form";
 
 
-const Form = ({model,submit}:
+const Form = ({model,submit,defaultForm,method}:
   {
     model:ModelType,
+    defaultForm?:DefaultFormValues,
+    method:'post'|'put',
     submit:{
       title:string,
       onAction?:(data:Record<string, unknown>)=>void
@@ -20,15 +23,23 @@ const Form = ({model,submit}:
     const form_methods = useForm<ModelFormType>({
       mode:"all",
       reValidateMode:"onChange",
-      resolver:zodResolver(model.schema)
+      resolver:zodResolver(model.schema),
+      defaultValues:defaultForm
     });
 
-    const {register,formState,control,handleSubmit} = form_methods;
-
+    const {register,formState,control,handleSubmit,setValue} = form_methods;
     const {errors} = formState;
-    const [coupledForm,setCoupledForm] = useState<ModelType|null>(null);
+    const [coupledForm,setCoupledForm] = useState<{
+      method:FormMethodType,
+      model:ModelType,
+      defaultForm?:{
+        values:DefaultFormValues,
+        registerId?:string,
+        index?:number
+      }
+    }|null>(null);
     const [coupledFieldArray,setCoupledFieldArray] = useState<UseFieldArrayReturn<FieldValues>|null>(null);
-
+    console.log(control._formValues)
   return (
     <>
     {
@@ -52,14 +63,37 @@ const Form = ({model,submit}:
         }}
         >
         <Form
-        model={coupledForm}
+        method={coupledForm.method}
+        model={coupledForm.model}
+        defaultForm={coupledForm.defaultForm?.values}
         submit={{
-          title:"Cadastrar",
+          title:
+          (coupledForm.method === 'post'
+          ? "Cadastrar"
+          : "Editar"),
           onAction(data) {
             console.log(data)
             !!coupledFieldArray
             &&
-            coupledFieldArray.append(data)
+            (
+              coupledForm.method === 'post'
+              ? 
+              coupledFieldArray.append(data)
+              :
+              coupledForm.method === 'put'
+              // &&
+              &&
+              (()=>{
+                if(typeof coupledForm.defaultForm?.index === 'number'){
+                coupledFieldArray.update(
+                  coupledForm.defaultForm?.index,
+                  data
+                )
+                // setValue(`${coupledForm.defaultForm.registerId}.${coupledForm.defaultForm.index}.name`,"MUDADO")
+                }
+                
+              })()
+            )
           },
         }}
         />
@@ -75,12 +109,22 @@ const Form = ({model,submit}:
 
       })}>
       <FormStructure
-      onCoupledForm={(model,fieldArray)=>{
-          setCoupledForm(model);
+        onCoupledForm={(model,fieldArray,method,defaultForm)=>{
+          setCoupledForm({
+            model:model,
+            method:method,
+            defaultForm:{
+              values:defaultForm?.values,
+              index:defaultForm?.index,
+              registerId:defaultForm?.registerId
+            },
+          });
           setCoupledFieldArray(fieldArray)
+          
       }}
       model={model}
       control={control}
+      onUpdateFields={setValue}
       errors={errors}
       register={register}
       />

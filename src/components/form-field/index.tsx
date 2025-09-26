@@ -36,9 +36,6 @@ const FormField = ({properties,register,warn}:FormFieldItemType
                 message={warn}
             />
         }
-        {
-            properties.registerId
-        }
     </div>
   )
 }

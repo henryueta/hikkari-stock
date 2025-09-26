@@ -1,10 +1,11 @@
+import type { DefaultFunctionType } from "./function"
 
 type ButtonActionType = 'button'| 'submit'
 
 interface ButtonItemType {
     title?:string,
     type?:ButtonActionType,
-    onClick?:()=>void
+    onClick?:DefaultFunctionType
 }
 
 type ButtonListType = ButtonItemType[]

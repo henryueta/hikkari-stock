@@ -2,6 +2,7 @@ import type { UseFieldArrayReturn } from "react-hook-form"
 import FormField from "../form-field"
 import type { FormFieldItemType, FormType } from "../../@types/form"
 import type { ZodObject } from "zod"
+import { onFindField } from "../../functions/field"
 
 const FormFieldList = (
   {
@@ -21,12 +22,14 @@ const FormFieldList = (
     fieldForm:FormType
     actions:UseFieldArrayReturn
 }) => {
+
+
   return (
     <div className="formFieldList">
       
         <label htmlFor={id}>
             <p>
-            {/* {title} */}
+            {title}
             </p>
         </label>
         {
@@ -43,13 +46,9 @@ const FormFieldList = (
                         identifier={formContent.properties.registerId}
                         properties={{   
                           registerId: `${formContent.properties.registerId}.${field_index}.${key}`,
-                          title: `${formContent.properties.title} - ${key}`,
+                          title:onFindField(fieldForm,key).title,
                           id:`${formContent.properties.id} - ${key}`,
-                          tag:fieldForm[
-                            fieldForm.findIndex((form_item)=>
-                              form_item.registerId === key
-                            )
-                          ].tag,
+                          tag:onFindField(fieldForm,key).tag,
                           type:formContent.properties.type,
                           modelBody:formContent.properties.modelBody
                         }}

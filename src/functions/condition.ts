@@ -1,7 +1,8 @@
+import type { DefaultFunctionType } from "../@types/function";
 
 const onCondition = (condition:boolean,result:{
-    onTrue:()=>void,
-    onFalse:()=>void
+    onTrue:DefaultFunctionType,
+    onFalse:DefaultFunctionType
 })=>{
 
     const result_check = [

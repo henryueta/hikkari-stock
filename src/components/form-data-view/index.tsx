@@ -1,32 +1,22 @@
 import { Fragment, useEffect, useState } from "react"
+import Button from "../button";
+import type { DefaultFunctionType } from "../../@types/function";
 
-const FormDataView = <T extends object,>({data}:{
-  data:T
+const FormDataView = <T extends object,>({body,actions}:{
+  body:{
+    label:string,
+    value:string
+  }[],
+  actions?:{
+    onDelete?:DefaultFunctionType,
+    onUpdate?:DefaultFunctionType
+  }
 }) => {
 
-  const [formatedData,setFormatedData] = useState<{ label: string; value: any; }[]>();
-
-  useEffect(()=>{
-
-    setFormatedData(Object.entries(data).map((data_item)=>
-        {
-          return {
-            label:data_item[0],
-            value:data_item[1]
-          }
-        }
-    ))
-
-  },[])
-  console.log(formatedData)
   return (
     <div className="form-data-view">
-      
-        
         {
-          formatedData
-          &&
-          formatedData?.map((data_item,data_index)=>
+          body?.map((data_item,data_index)=>
             <Fragment key={data_index}>
               {
                 typeof data_item.value !== 'object'
@@ -40,8 +30,7 @@ const FormDataView = <T extends object,>({data}:{
                   typeof data_item.value === 'object'
                   ?
                   <FormDataView
-                  data={data_item.value}
-
+                  body={data_item.value}
                   />
                   :
                   data_item.value
@@ -50,7 +39,38 @@ const FormDataView = <T extends object,>({data}:{
             </Fragment>
           )
         }
-
+        {
+          !!actions
+          &&
+          !!actions.onDelete
+          &&
+          <Button
+          title="Deletar"
+          onClick={()=>actions.onDelete && actions.onDelete()}
+          />
+        }
+        {
+          !!actions
+          &&
+          !!actions.onUpdate
+          &&
+          <Button
+          title="Editar"
+          onClick={()=>{
+             actions.onUpdate && actions.onUpdate()
+            // if(!!teste){
+            //   setFormatedData(Object.entries(teste).map((data_item)=>
+            //     {
+            //       return {
+            //         label:data_item[0],
+            //         value:data_item[1]
+            //       }
+            //     }
+            //   ))
+            // }
+          }}
+          />
+        }
     </div>
   )
 }

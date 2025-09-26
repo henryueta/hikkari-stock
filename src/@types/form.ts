@@ -21,6 +21,10 @@ Record<'type',FormItemFieldType>
 
 type FormType = FormItemType[];
 
+type DefaultFormValues = Readonly<{[x: string]: unknown;}> | undefined;
+
+type FormMethodType = 'put' | 'post';
+
 interface FormFieldItemType {
     properties:FormItemType,
     register:UseFormRegister<Record<string, unknown>>
@@ -37,5 +41,7 @@ export type {
     FormItemType,
     FormType,
     FormFieldItemType,
-    FormFieldListType
+    FormFieldListType,
+    DefaultFormValues,
+    FormMethodType
 }

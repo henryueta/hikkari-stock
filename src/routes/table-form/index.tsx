@@ -12,13 +12,13 @@ const TableFormPage = () => {
                 table_data_item.name === table
     )?.model);
 
-
   return (
     <section className="tableFormPage">
         {
         !!tableModel
         &&    
         <Form
+        method="post"
         model={
             tableModel
         }

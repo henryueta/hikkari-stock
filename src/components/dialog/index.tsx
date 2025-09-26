@@ -1,4 +1,5 @@
 import type { ChildrenType } from "../../@types/children"
+import type { DefaultFunctionType } from "../../@types/function"
 import ButtonList from "../button-list"
 import styles from "./index.module.css"
 
@@ -9,11 +10,11 @@ const Dialog = ({
     options:{
         exit:{
             title:string,
-            onAction:()=>void
+            onAction:DefaultFunctionType
         },
         conclude:{
             title:string,
-            onAction:()=>void
+            onAction:DefaultFunctionType
         }
     }
 }) => {
