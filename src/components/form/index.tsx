@@ -5,11 +5,11 @@ import z from "zod";
 import FormStructure from "../form-structure";
 import Dialog from "../dialog";
 import { useState } from "react";
-import type { DefaultFormValuesType, FormMethodType } from "../../@types/form";
+import type { DefaultFormValuesType, FormChangeFieldsType, FormMethodType } from "../../@types/form";
 import Button from "../button";
 
 
-const Form = ({model,submit,defaultForm}:
+const Form = ({model,submit,defaultForm,changeFields}:
   {
     model:ModelType,
     defaultForm?:DefaultFormValuesType,
@@ -18,9 +18,9 @@ const Form = ({model,submit,defaultForm}:
       title:string,
       onAction?:(data:Record<string, unknown>)=>void
     },
+    changeFields?:FormChangeFieldsType
   }) => {
     type ModelFormType = z.infer<typeof model.schema> 
-    
     const form_methods = useForm<ModelFormType>({
       mode:"all",
       reValidateMode:"onChange",
@@ -37,7 +37,8 @@ const Form = ({model,submit,defaultForm}:
         values:DefaultFormValuesType,
         registerId?:string,
         index?:number
-      }
+      },
+      changeFields?:FormChangeFieldsType
     }|null>(null);
     const [coupledFieldArray,setCoupledFieldArray] = useState<UseFieldArrayReturn<FieldValues>|null>(null);
     console.log(control._formValues)
@@ -64,6 +65,7 @@ const Form = ({model,submit,defaultForm}:
         }}
         >
         <Form
+        changeFields={coupledForm.changeFields}
         method={coupledForm.method}
         model={coupledForm.model}
         defaultForm={coupledForm.defaultForm?.values}
@@ -107,7 +109,8 @@ const Form = ({model,submit,defaultForm}:
         submit.onAction(data);
       })}>
       <FormStructure
-        onCoupledForm={(model,fieldArray,method,defaultForm)=>{
+        changeFields={changeFields}
+        onCoupledForm={(model,fieldArray,method,changeFields,defaultForm,)=>{
           setCoupledForm({
             model:model,
             method:method,
@@ -116,6 +119,7 @@ const Form = ({model,submit,defaultForm}:
               index:defaultForm?.index,
               registerId:defaultForm?.registerId
             },
+            changeFields:changeFields
           });
           setCoupledFieldArray(fieldArray)
           

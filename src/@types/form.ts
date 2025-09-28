@@ -38,6 +38,11 @@ type UseFormRegisterType= UseFormRegister<Record<string, unknown>>;
 
 type FormMethodType = 'put' | 'post';
 
+type FormChangeFieldsType = {
+    onInput?:(value:string)=>void,
+    onSelect?:(value:string)=>void
+}
+
 interface FormFieldItemType {
     properties:FormItemType,
     register:UseFormRegisterType
@@ -56,5 +61,6 @@ export type {
     FormFieldListType,
     DefaultFormValuesType,
     FormMethodType,
-    UseFormRegisterType
+    UseFormRegisterType,
+    FormChangeFieldsType
 }

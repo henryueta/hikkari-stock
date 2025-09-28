@@ -1,6 +1,6 @@
 import type { UseFieldArrayReturn } from "react-hook-form"
 import FormField from "../form-field"
-import type { FormFieldItemType, FormType } from "../../@types/form"
+import type { FormChangeFieldsType, FormFieldItemType, FormType } from "../../@types/form"
 import type { ZodObject } from "zod"
 import { onFindField } from "../../functions/field"
 import Button from "../button"
@@ -14,7 +14,8 @@ const FormFieldList = (
     fieldSchema,
     actions,
     formContent,
-    fieldForm
+    fieldForm,
+    changeFields
   }:{
     title:string,
     id:string,
@@ -22,7 +23,8 @@ const FormFieldList = (
     formContent:FormFieldItemType,
     fieldSchema:ZodObject,
     fieldForm:FormType
-    actions:UseFieldArrayReturn
+    actions:UseFieldArrayReturn,
+    changeFields?:FormChangeFieldsType
 }) => {
 
 
@@ -40,14 +42,31 @@ const FormFieldList = (
                     return <div className="fieldListItemContainer" key={field_item.id}>
                     {
                         Object.entries(fieldSchema.shape).map(
-                        ([key,_],field_schema_index)=>(
+                        ([key,_])=>(
                         <FormField
                         onSetValue={(value)=>{
                           const current_field = onFindField(fieldForm,key)
+                          !!changeFields
+                          &&
+                          current_field.tag === 'input'
+                          ? 
+                          changeFields.onInput && changeFields.onInput(value)
+                          :
+                          current_field.tag === 'select'
+                          &&
+                          changeFields?.onSelect && changeFields.onSelect(value)
+                          
                           !!current_field.changeWatch
                           &&
                           current_field.changeWatch.changeFields.forEach((field_for_change)=>
-                            actions.update(field_schema_index,onDefaultTypeofData(field_for_change.typeOfField))
+                          {
+                            actions.update(field_index,
+                              {
+                              [key]:value,
+                              [field_for_change.registerId]:onDefaultTypeofData(field_for_change.typeOfField)
+                              }
+                            )
+                          }
                           
                           )
 

@@ -14,8 +14,7 @@ type TableDataType = 'product'|'sale'|'variation'|'auth';
 interface TableDataItemType {
 
     name:TableDataType,
-    model:ModelType
-
+    model:ModelType,
 }
 
 type TableDataListType = TableDataItemType[] ;

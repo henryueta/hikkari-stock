@@ -38,8 +38,8 @@ const Select = ({id,register,registerId,onSelect}:
             })
         }}
         >
-            <option value="1">1</option>
-            <option value="2">2</option>
+            <option value="f4b77dbb-39b2-46e8-a9a7-e1e3f2302ff9">1</option>
+            <option value="f4b77dbb-39b2-46e8-a9a7-e1e3f2302ff9">2</option>
         </select>
     </div>
   )

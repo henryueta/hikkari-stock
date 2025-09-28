@@ -2,6 +2,7 @@ import z from "zod";
 import type { FormType } from "../@types/form";
 import Model from "../classes/Model"
 import type { SchemaType } from "../@types/schema";
+import api_endpoints from "../config/api";
 
 const sale_variation_schema:SchemaType = z.object({
 
@@ -20,7 +21,7 @@ const sale_variation_form:FormType = [
         type:"text",
         changeWatch:{
             onChange(value) {
-                return value
+                return api_endpoints.sale_size.get+value
             },
             changeFields:[
                 {

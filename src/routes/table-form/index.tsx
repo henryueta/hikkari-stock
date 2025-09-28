@@ -15,6 +15,9 @@ const TableFormPage = () => {
         table_data_list.find((table_data_item)=>
                 table_data_item.name === table
     )?.model);
+
+
+
     const {onRequest,onCreateCancelToken} = useHandleAxios();
     const {onGetToken} = useHandleToken();
   return (
@@ -25,6 +28,12 @@ const TableFormPage = () => {
         !!(tableModel && !!(type === 'post' || type === 'put'))
         ?    
         <Form
+        changeFields={{
+          onSelect(value) {
+          },
+          onInput(value) {
+          },
+        }}
         method={type}
         model={
             tableModel
@@ -37,11 +46,10 @@ const TableFormPage = () => {
               );
               if(!!table_type){
                  onRequest({
-                  url:api_endpoints[table_type].post,
+                  url:api_endpoints[table_type].post+"?token="+onGetToken(),
                   method:type,
                   data:{
-                    data:data,
-                    token:onGetToken()
+                    data:data
                   },
                   cancelToken:onCreateCancelToken()
                 },{

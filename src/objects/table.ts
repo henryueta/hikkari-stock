@@ -1,20 +1,36 @@
 import type { TableDataListType } from "../@types/table"
+import api_endpoints from "../config/api"
 import {product_model} from "../models/product"
 import { sale_model } from "../models/sale"
 import { variation_model } from "../models/variation"
 
-const table_data_list:TableDataListType = [
+const table_form_config = [
     {
-        name:"variation",
-        model:variation_model
+        name:'variation',
+        queryOptionsUrl:null
     },
-    {   
+    {
         name:'product',
-        model:product_model
+        queryOptionsUrl:null
     },
     {
         name:'sale',
-        model:sale_model
+        queryOptionsUrl:api_endpoints.sale_product.get
+    }
+]
+
+const table_data_list:TableDataListType = [
+    {
+        name:"variation",
+        model:variation_model,
+    },
+    {   
+        name:'product',
+        model:product_model,
+    },
+    {
+        name:'sale',
+        model:sale_model,
     },
 ]
 
@@ -43,5 +59,6 @@ const button_table_management_list = [
     export {
         button_table_management_list,
         table_form_type_list,
-        table_data_list
+        table_data_list,
+        table_form_config
     }

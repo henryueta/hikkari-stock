@@ -6,27 +6,29 @@ import FormField from "../form-field";
 import Button from "../button";
 import FormDataView from "../form-data-view";
 import { Fragment } from "react/jsx-runtime";
-import type { DefaultFormValuesType, FormMethodType } from "../../@types/form";
+import type { DefaultFormValuesType, FormChangeFieldsType, FormMethodType } from "../../@types/form";
 import { onFindField } from "../../functions/field";
 import { onDefaultTypeofData } from "../../functions/output";
 
 
-const FormStructure = ({model,control,register,errors,onCoupledForm,onUpdateFields}
+const FormStructure = ({model,control,register,errors,onCoupledForm,onUpdateFields,changeFields}
     :{
         model:ModelType,
         control:Control,
         register:UseFormRegister<Record<string, unknown>>,
         onUpdateFields:UseFormSetValue<Record<string, unknown>>,
+        changeFields?:FormChangeFieldsType,
         errors:FieldErrors<Record<string, unknown>>,
         onCoupledForm?:(
           model:ModelType,
           fieldArray:UseFieldArrayReturn<FieldValues>,
           method:FormMethodType,
+          changeFields?:FormChangeFieldsType,
           defaultForm?:{
             registerId:string | undefined,
             index:number | undefined
             values:DefaultFormValuesType,
-          }
+          },
           )=>void
       }) => {
         
@@ -61,6 +63,7 @@ const FormStructure = ({model,control,register,errors,onCoupledForm,onUpdateFiel
               ){
                 return (
                   <FormFieldList
+                  changeFields={changeFields}
                   key={field_item.registerId+field_index}
                   actions={fieldArrayActions}
                   id={field_item.id}
@@ -118,7 +121,7 @@ const FormStructure = ({model,control,register,errors,onCoupledForm,onUpdateFiel
                             &&
                             !!field_item.modelBody
                             &&
-                            onCoupledForm(field_item.modelBody,fieldArrayActions,'put',{
+                            onCoupledForm(field_item.modelBody,fieldArrayActions,'put',changeFields,{
                               registerId:field_item.registerId,
                               values:{...field_array_item},
                               index:field_array_index
@@ -135,7 +138,7 @@ const FormStructure = ({model,control,register,errors,onCoupledForm,onUpdateFiel
                   &&
                   !!field_item.modelBody
                   &&
-                  onCoupledForm(field_item.modelBody,fieldArrayActions,'post'));
+                  onCoupledForm(field_item.modelBody,fieldArrayActions,'post',changeFields));
                 }}                
                 />
                 </Fragment>
@@ -144,6 +147,21 @@ const FormStructure = ({model,control,register,errors,onCoupledForm,onUpdateFiel
             return (
             <FormField
               onSetValue={(value)=>{
+                !!changeFields
+                &&
+                field_item.tag === 'input'
+                ? 
+                changeFields.onInput && changeFields.onInput(value)
+                :
+                field_item.tag === 'select'
+                &&
+                changeFields?.onSelect && changeFields.onSelect(value)
+                // axios.request({
+                //   url:field_item.changeWatch?.onChange(value)+"&token="+localStorage.getItem("token"),
+                //   cancelToken:axios.CancelToken.source().token,
+                //   method:"get"
+                // })
+                // .then((result)=>console.log(result))
                 !!field_item.changeWatch
                 &&
                 field_item.changeWatch.changeFields.forEach((field_for_change)=>
@@ -151,6 +169,7 @@ const FormStructure = ({model,control,register,errors,onCoupledForm,onUpdateFiel
                       onDefaultTypeofData(field_for_change.typeOfField)
                     ))
                 )
+                
               }}
               key={field_item.registerId+field_index}
               properties={field_item}
