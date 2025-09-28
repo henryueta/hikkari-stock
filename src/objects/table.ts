@@ -1,5 +1,6 @@
 import type { TableDataListType } from "../@types/table"
 import {product_model} from "../models/product"
+import { sale_model } from "../models/sale"
 import { variation_model } from "../models/variation"
 
 const table_data_list:TableDataListType = [
@@ -13,8 +14,8 @@ const table_data_list:TableDataListType = [
     },
     {
         name:'sale',
-        model:product_model
-    }
+        model:sale_model
+    },
 ]
 
 const table_form_type_list = [

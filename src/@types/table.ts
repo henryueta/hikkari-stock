@@ -9,9 +9,11 @@ interface TableType {
     body:TableBodyType
 }
 
+type TableDataType = 'product'|'sale'|'variation'|'auth';
+
 interface TableDataItemType {
 
-    name:'product'|'sale'|'variation',
+    name:TableDataType,
     model:ModelType
 
 }
@@ -22,5 +24,6 @@ export type {
     TableBodyType,
     TableType,
     TableDataItemType,
-    TableDataListType
+    TableDataListType,
+    TableDataType
 }

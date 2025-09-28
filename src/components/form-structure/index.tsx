@@ -6,8 +6,9 @@ import FormField from "../form-field";
 import Button from "../button";
 import FormDataView from "../form-data-view";
 import { Fragment } from "react/jsx-runtime";
-import type { DefaultFormValues, FormMethodType } from "../../@types/form";
+import type { DefaultFormValuesType, FormMethodType } from "../../@types/form";
 import { onFindField } from "../../functions/field";
+import { onDefaultTypeofData } from "../../functions/output";
 
 
 const FormStructure = ({model,control,register,errors,onCoupledForm,onUpdateFields}
@@ -24,7 +25,7 @@ const FormStructure = ({model,control,register,errors,onCoupledForm,onUpdateFiel
           defaultForm?:{
             registerId:string | undefined,
             index:number | undefined
-            values:DefaultFormValues,
+            values:DefaultFormValuesType,
           }
           )=>void
       }) => {
@@ -50,7 +51,6 @@ const FormStructure = ({model,control,register,errors,onCoupledForm,onUpdateFiel
 
     return model.form.map((field_item,field_index)=>
           {
-
             const field_schema = model.schema.shape[field_item.registerId];
             const fieldArrayActions = fieldArrays[field_item.registerId]
               if(field_schema instanceof z.ZodArray
@@ -68,19 +68,21 @@ const FormStructure = ({model,control,register,errors,onCoupledForm,onUpdateFiel
                   title={field_item.title}
                   fieldSchema={field_schema.element}
                   fieldForm={model.form[model.form.findIndex((form_item)=>
-                  form_item.tag === 'form' && form_item.id === field_item.id
+                  (
+                    form_item.tag === 'form' 
+                    && 
+                    form_item.id === field_item.id
+                  )
                   )].modelBody!.form}
                   formContent={{
                     properties:field_item,
                     register:register,
                     warn:errors[field_item.registerId]?.message || null,
-                    index:field_index
                   }}
                   />
                 )
               }
               if(field_item.tag === 'dialog'){
-                
                 return <Fragment
                 key={field_item.registerId}>
                   <p>{field_item.title}</p>
@@ -127,7 +129,7 @@ const FormStructure = ({model,control,register,errors,onCoupledForm,onUpdateFiel
                   )
                 }
                 <Button
-                title={"Adicionar "+field_item.title}
+                title={"Adicionar "+field_item.title.toLocaleLowerCase()}
                 onClick={()=>{
                   return (!!onCoupledForm
                   &&
@@ -141,8 +143,16 @@ const FormStructure = ({model,control,register,errors,onCoupledForm,onUpdateFiel
 
             return (
             <FormField
+              onSetValue={(value)=>{
+                !!field_item.changeWatch
+                &&
+                field_item.changeWatch.changeFields.forEach((field_for_change)=>
+                    onUpdateFields(field_for_change.registerId,(
+                      onDefaultTypeofData(field_for_change.typeOfField)
+                    ))
+                )
+              }}
               key={field_item.registerId+field_index}
-              identifier={field_item.registerId}
               properties={field_item}
               register={register}
               warn={errors[field_item.registerId]?.message || null}

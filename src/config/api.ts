@@ -7,10 +7,12 @@ const api_endpoints = {
         post:api_base+"auth/post"
     },
     product:{
-        get:api_base+"product/get"
+        get:api_base+"product/get",
+        post:api_base+"product/post"
     },
     sale:{
-        get:api_base+"sale/get"
+        get:api_base+"sale/get",
+        post:api_base+"sale/post"
     }
 
 }

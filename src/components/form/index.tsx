@@ -5,13 +5,14 @@ import z from "zod";
 import FormStructure from "../form-structure";
 import Dialog from "../dialog";
 import { useState } from "react";
-import type { DefaultFormValues, FormMethodType } from "../../@types/form";
+import type { DefaultFormValuesType, FormMethodType } from "../../@types/form";
+import Button from "../button";
 
 
-const Form = ({model,submit,defaultForm,method}:
+const Form = ({model,submit,defaultForm}:
   {
     model:ModelType,
-    defaultForm?:DefaultFormValues,
+    defaultForm?:DefaultFormValuesType,
     method:'post'|'put',
     submit:{
       title:string,
@@ -33,7 +34,7 @@ const Form = ({model,submit,defaultForm,method}:
       method:FormMethodType,
       model:ModelType,
       defaultForm?:{
-        values:DefaultFormValues,
+        values:DefaultFormValuesType,
         registerId?:string,
         index?:number
       }
@@ -72,7 +73,7 @@ const Form = ({model,submit,defaultForm,method}:
           ? "Cadastrar"
           : "Editar"),
           onAction(data) {
-            console.log(data)
+            console.log("enviado")
             !!coupledFieldArray
             &&
             (
@@ -103,10 +104,7 @@ const Form = ({model,submit,defaultForm,method}:
       <form onSubmit={handleSubmit((data)=>{
         !!submit.onAction
         &&
-        submit.onAction(data)
-                
-        console.log(data)
-
+        submit.onAction(data);
       })}>
       <FormStructure
         onCoupledForm={(model,fieldArray,method,defaultForm)=>{
@@ -128,10 +126,10 @@ const Form = ({model,submit,defaultForm,method}:
       errors={errors}
       register={register}
       />
-      <button
-      >
-        {submit.title}
-      </button>
+      <Button
+      title={submit.title}
+      type="submit"
+      />
      </form>
     </FormProvider>
     </>

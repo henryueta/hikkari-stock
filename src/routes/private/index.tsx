@@ -12,15 +12,17 @@ const Private = ({children}:ChildrenType) => {
       onCheckLocalToken();
 
     },[]);
-
+    
   return (
             (isChecking !== null)
-            &&
-            !currentAuthContext.auth
+            ?
+            (!currentAuthContext.auth
             ?
             <Navigate to={"/auth"}/>
             :
-            children
+            children)
+            :
+            <h1>loading . . .</h1>
         )
 }
 

@@ -1,5 +1,6 @@
 import type { UseFormRegister } from "react-hook-form";
 import type { SchemaType } from "./schema";
+import type { TypeofOutput } from "./output";
 
 type FormItemFieldType = 'text'|'password'|'email'
 
@@ -18,19 +19,30 @@ Record<'type',FormItemFieldType>
         schema:SchemaType
     }
 }
+&
+{
+    changeWatch?:{
+        onChange:(value:string)=>string,
+        changeFields:{
+            registerId:string,
+            typeOfField:TypeofOutput
+        }[]
+    }
+}
 
 type FormType = FormItemType[];
 
-type DefaultFormValues = Readonly<{[x: string]: unknown;}> | undefined;
+type DefaultFormValuesType = Readonly<{[x: string]: unknown;}> | undefined;
+
+type UseFormRegisterType= UseFormRegister<Record<string, unknown>>;
 
 type FormMethodType = 'put' | 'post';
 
 interface FormFieldItemType {
     properties:FormItemType,
-    register:UseFormRegister<Record<string, unknown>>
-     warn:string | null,
-     index?:number,
-     identifier?:string
+    register:UseFormRegisterType
+    warn:string | null,
+    onSetValue?:(value:string)=>void
 }
 
 type FormFieldListType = FormFieldItemType[];
@@ -42,6 +54,7 @@ export type {
     FormType,
     FormFieldItemType,
     FormFieldListType,
-    DefaultFormValues,
-    FormMethodType
+    DefaultFormValuesType,
+    FormMethodType,
+    UseFormRegisterType
 }
