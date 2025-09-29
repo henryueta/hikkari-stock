@@ -65,27 +65,41 @@ const FormFieldList = (
                           const current_field = onFindField(fieldForm,key)
                           !!changeFields
                           &&
+                          !!current_field.changeWatch?.changeControl
+                          &&
                           current_field.tag === 'input'
                           ? 
                           changeFields.onInput && changeFields.onInput(
                             current_field.changeWatch
-                            ?
-                            current_field.changeWatch?.onChange(value)
-                            :
+                            &&
+                            (
+                            !!current_field.changeWatch.onChange
+                            &&
+                            current_field.changeWatch.onChange(value))
+                            ||
                             value
                           )
                           :
+                          !!current_field.changeWatch?.changeControl
+                          &&
                           current_field.tag === 'select'
                           &&
                           changeFields?.onSelect && changeFields.onSelect(
                             current_field.changeWatch
-                            ?
-                            current_field.changeWatch?.onChange(value)
-                            :
+                            &&
+                            (
+                            !!current_field.changeWatch.onChange
+                            &&
+                            current_field.changeWatch.onChange(value))
+                            ||
                             value
                           )
                           
                           !!current_field.changeWatch
+                          &&
+                          !!current_field.changeWatch.changeFields
+                          &&
+                          !!current_field.changeWatch?.changeControl
                           &&
                           current_field.changeWatch.changeFields.forEach((field_for_change)=>
                           {

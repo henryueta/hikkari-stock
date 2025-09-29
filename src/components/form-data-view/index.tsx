@@ -1,8 +1,8 @@
-import { Fragment, useEffect, useState } from "react"
+import { Fragment } from "react"
 import Button from "../button";
 import type { DefaultFunctionType } from "../../@types/function";
 
-const FormDataView = <T extends object,>({body,actions}:{
+const FormDataView = ({body,actions}:{
   body:{
     label:string,
     value:string
@@ -10,7 +10,7 @@ const FormDataView = <T extends object,>({body,actions}:{
   actions?:{
     onDelete?:DefaultFunctionType,
     onUpdate?:DefaultFunctionType
-  }
+  },
 }) => {
 
   return (

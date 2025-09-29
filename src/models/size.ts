@@ -4,7 +4,7 @@ import type { FormType } from "../@types/form";
 import Model from "../classes/Model";
 
 const size_schema:SchemaType = z.object({
-    name:z.string().min(10,{message:"ERROR"}),
+    name:z.string(),
     quantity:z.string()
 })
 

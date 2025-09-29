@@ -23,8 +23,9 @@ Record<'type',FormItemFieldType>
 &
 {
     changeWatch?:{
-        onChange:(value:string)=>string,
-        changeFields:{
+        changeControl:boolean
+        onChange?:(value:string)=>string,
+        changeFields?:{
             registerId:string,
             typeOfField:TypeofOutput
         }[]
@@ -34,7 +35,10 @@ Record<'type',FormItemFieldType>
 {
     queryOptionsUrl?:string
 }
-
+&
+{
+    defaultViewValue?:string
+}
 
 type FormType = FormItemType[];
 

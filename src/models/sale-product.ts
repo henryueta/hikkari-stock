@@ -19,6 +19,7 @@ const sale_product_form:FormType = [
         title:"Produto",
         type:"text",
         changeWatch:{
+            changeControl:true,
             onChange(value) {
                 return api_endpoints.sale_variation.get+value
             },
@@ -28,7 +29,8 @@ const sale_product_form:FormType = [
                     typeOfField:'object'
                 }
             ]
-        }
+        },
+        defaultViewValue:"Produto"
     },
     {
         id:"variations_id",

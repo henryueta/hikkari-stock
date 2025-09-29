@@ -9,8 +9,8 @@ import { Fragment } from "react/jsx-runtime";
 import type { DefaultFormValuesType, FormChangeFieldsType, FormMethodType, FormSelectOptionType } from "../../@types/form";
 import { onFindField } from "../../functions/field";
 import { onDefaultTypeofData } from "../../functions/output";
-import useHandleAxios from "../../hooks/useHandleAxios";
-import useHandleToken from "../../hooks/useHandleToken";
+// import useHandleAxios from "../../hooks/useHandleAxios";
+// import useHandleToken from "../../hooks/useHandleToken";
 
 
 const FormStructure = ({model,control,register,errors,defaultOptions,onCoupledForm,onUpdateFields,changeFields}
@@ -36,8 +36,8 @@ const FormStructure = ({model,control,register,errors,defaultOptions,onCoupledFo
           )=>void
       }) => {
         
-    const {onRequest,onCreateCancelToken} = useHandleAxios();
-      const {onGetToken} = useHandleToken();
+    // const {onRequest,onCreateCancelToken} = useHandleAxios();
+      // const {onGetToken} = useHandleToken();
 
   const fieldArrays = model.form.reduce((acc, field_item) => {
   const field_schema = model.schema.shape[field_item.registerId];
@@ -104,6 +104,7 @@ const FormStructure = ({model,control,register,errors,defaultOptions,onCoupledFo
                   (control._formValues[field_item.registerId] as object[]).map((field_array_item,field_array_index)=>
                       <FormDataView
                         key={field_array_index}
+
                         body={Object.entries(field_array_item).map((field_data_item)=>
                         {
                           const field_form = onFindField(model.form,field_item.registerId).modelBody?.form
@@ -113,7 +114,13 @@ const FormStructure = ({model,control,register,errors,defaultOptions,onCoupledFo
                             return {
                               label:
                               current_field.title,
-                              value:field_data_item[1]
+                              value:(
+                                !current_field.defaultViewValue
+                                ?
+                                field_data_item[1]
+                                : 
+                                current_field.defaultViewValue + (" número ("+(field_array_index+1)+")")
+                              )
                             }
                           }
                          
@@ -145,45 +152,43 @@ const FormStructure = ({model,control,register,errors,defaultOptions,onCoupledFo
                 onClick={()=>{
                   // field_item.
                   
-                  const current_field = onFindField(
-                    model.form,
-                    field_item.registerId
-                  )
+                  // const current_field = onFindField(
+                  //   model.form,
+                  //   field_item.registerId
+                  // )
 
-                  if(current_field.queryOptionsUrl){
-                    return onRequest({
-                    url:current_field.queryOptionsUrl,
-                    method:"get",
-                    params:{
-                      token:onGetToken()
-                    },
-                    cancelToken:onCreateCancelToken(),
-                  },{
-                    onThen(result) {
-                      (!!onCoupledForm
-                        &&
-                        !!field_item.modelBody
-                        &&
-                        onCoupledForm(field_item.modelBody,fieldArrayActions,'post',changeFields,
-                          result.data.map((item)=>{
-                            return {
-                              registerId:item.name,
-                              options:item.options
-                            }
-                          }) || []
-                        ));
+                  // if(current_field.queryOptionsUrl){
+                  //   return onRequest({
+                  //   url:current_field.queryOptionsUrl,
+                  //   method:"get",
+                  //   params:{
+                  //     token:onGetToken()
+                  //   },
+                  //   cancelToken:onCreateCancelToken(),
+                  // },{
+                  //   onThen(result) {
+                  //     (!!onCoupledForm
+                  //       &&
+                  //       !!field_item.modelBody
+                  //       &&
+                  //       onCoupledForm(field_item.modelBody,fieldArrayActions,'post',changeFields,
+                  //         result.data.map((item)=>{
+                  //           return {
+                  //             registerId:item.name,
+                  //             options:item.options
+                  //           }
+                  //         }) || []
+                  //       ));
                                      
-                    },
-                      onCatch(error) {
-                      console.log(error)
-                      },
-                    });
-                  }
+                  //   },
+                  //     onCatch(error) {
+                  //     console.log(error)
+                  //     },
+                  //   });
+                  // }
                   
                   
-                  return (!current_field.queryOptionsUrl)
-                  &&
-                  (!!onCoupledForm
+                  return (!!onCoupledForm
                   &&
                   !!field_item.modelBody
                   &&
@@ -204,27 +209,37 @@ const FormStructure = ({model,control,register,errors,defaultOptions,onCoupledFo
 
                 !!changeFields
                 &&
+                field_item.changeWatch?.changeControl
+                &&
                 field_item.tag === 'input'
                 ? 
                 changeFields.onInput && changeFields.onInput(
                   !!field_item.changeWatch
-                  ?
-                  field_item.changeWatch?.onChange(value)
-                  :
+                  &&
+                  (field_item.changeWatch.onChange
+                  &&
+                  field_item.changeWatch.onChange(value))
+                  ||
                   value
                 )
                 :
                 field_item.tag === 'select'
                 &&
+                field_item.changeWatch?.changeControl
+                &&
                 changeFields?.onSelect && changeFields.onSelect(
                   !!field_item.changeWatch
-                  ?
-                  field_item.changeWatch?.onChange(value)
-                  :
+                  &&
+                  (field_item.changeWatch.onChange
+                  &&
+                  field_item.changeWatch.onChange(value))
+                  ||
                   value
                 )
                 
                 !!field_item.changeWatch
+                &&
+                field_item.changeWatch.changeFields
                 &&
                 field_item.changeWatch.changeFields.forEach((field_for_change)=>
                     onUpdateFields(field_for_change.registerId,(

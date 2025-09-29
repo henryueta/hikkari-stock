@@ -20,6 +20,7 @@ const sale_variation_form:FormType = [
         title:"Variação",
         type:"text",
         changeWatch:{
+            changeControl:true,
             onChange(value) {
                 return api_endpoints.sale_size.get+value
             },
@@ -40,7 +41,10 @@ const sale_variation_form:FormType = [
         registerId:"size_id",
         tag:"select",
         title:"Tamanho",
-        type:"text"
+        type:"text",
+        changeWatch:{
+            changeControl:false
+        }
     },
     {
         id:"quantity_id",

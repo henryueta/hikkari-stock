@@ -52,7 +52,26 @@ const TableFormPage = () => {
                 })
 
                 if(!!prev){
-                  return [...prev,...current_form_option]
+                  let formated_prev_list = prev;
+
+                  const prev_register_list = new Set(
+                    prev.map((option_item)=>option_item.registerId)
+                  );
+                  const form_option_register_list = new Set(
+                    current_form_option.map((option_item)=>option_item.registerId)
+                  );
+
+                  for(let registerId of prev_register_list){
+                    if(form_option_register_list.has(registerId)){
+                      
+                      formated_prev_list = formated_prev_list.filter((prev_item)=>
+                        prev_item.registerId !== registerId
+                      )
+
+                    }
+                  }
+
+                  return [...formated_prev_list,...current_form_option]
                 }
                 return current_form_option
 
