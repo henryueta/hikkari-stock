@@ -3,6 +3,7 @@ import type { SchemaType } from "../@types/schema";
 import type { FormType } from "../@types/form";
 import { sale_product_model, sale_product_schema } from "./sale-product";
 import Model from "../classes/Model";
+import api_endpoints from "../config/api";
 
 
 const sale_schema:SchemaType = z.object({
@@ -24,7 +25,8 @@ const sale_form:FormType = [
         tag:"dialog",
         title:"Produtos",
         type:"text",
-        modelBody:sale_product_model
+        modelBody:sale_product_model,
+        queryOptionsUrl:api_endpoints.sale_product.get
     }
 ]
 

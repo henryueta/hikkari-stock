@@ -1,12 +1,14 @@
 import { useParams } from "react-router-dom"
 import Form from "../../components/form";
-import { table_data_list } from "../../objects/table";
-import { useState } from "react";
+import { table_data_list, table_form_config } from "../../objects/table";
+import { useEffect, useState } from "react";
 import type { ModelType } from "../../@types/model";
 import api_endpoints from "../../config/api";
 import type { TableDataType } from "../../@types/table";
 import useHandleAxios from "../../hooks/useHandleAxios";
 import useHandleToken from "../../hooks/useHandleToken";
+import type { SelectOptionType } from "../../@types/select";
+import type { FormSelectOptionType } from "../../@types/form";
 
 const TableFormPage = () => {
 
@@ -15,25 +17,83 @@ const TableFormPage = () => {
         table_data_list.find((table_data_item)=>
                 table_data_item.name === table
     )?.model);
-
-
+    const [tableQueryOptionsUrl,setTableQueryOptionsUrl] = useState<string | null | undefined>(
+      table_form_config.find((table_config_item)=>
+        table_config_item.name === table
+      )?.queryOptionsUrl
+    );
+    const [tableFormOptions,setTableFormOptions] = useState<FormSelectOptionType| null>(null);
 
     const {onRequest,onCreateCancelToken} = useHandleAxios();
     const {onGetToken} = useHandleToken();
+    useEffect(()=>{
+      if(tableQueryOptionsUrl !== null){
+        onRequest({
+          url:tableQueryOptionsUrl,
+          params:{
+            token:onGetToken()
+          },
+          method:"get",
+          cancelToken:onCreateCancelToken(),
+        },{
+          onThen(result) {
+            const curret_result = result.data as {
+            name:string,
+            options:SelectOptionType
+          }[]
+          console.error(result.data)
+            setTableFormOptions(
+              ((prev)=>{
+                const current_form_option = curret_result.map((item)=>{
+                  return {
+                    registerId:item.name,
+                    options:item.options
+                  }
+                })
+
+                if(!!prev){
+                  return [...prev,...current_form_option]
+                }
+                return current_form_option
+
+              })
+            )
+          },
+          onCatch(error) {
+            console.log(error)
+          },
+        })
+
+      }
+
+    },[tableQueryOptionsUrl])
+
+
+
+
   return (
     <section className="tableFormPage">
         {
         !!(table && type)
         &&
         !!(tableModel && !!(type === 'post' || type === 'put'))
+        &&
+        !!(tableQueryOptionsUrl !== undefined && tableFormOptions !== null
+          ||
+          tableQueryOptionsUrl === null
+        )
         ?    
         <Form
+        defaultOptions={tableFormOptions}
         changeFields={{
           onSelect(value) {
+            setTableQueryOptionsUrl(value)
           },
           onInput(value) {
+
           },
         }}
+
         method={type}
         model={
             tableModel

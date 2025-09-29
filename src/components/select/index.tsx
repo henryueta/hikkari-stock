@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react"
 import type { UseFormRegisterType } from "../../@types/form"
-import type { SelectType } from "../../@types/select"
+import type { OptionType, SelectOptionType } from "../../@types/select"
 
-const Select = ({id,register,registerId,onSelect}:
+const Select = ({id,register,registerId,onSelect,options}:
     {
         id?:string,
         register:UseFormRegisterType,
         registerId:string,
-        onSelect?:(selected:SelectType)=>void,
+        onSelect?:(selected:OptionType)=>void,
+        options?:SelectOptionType
     }) => {
-
-        const [selected,setSelected] = useState<SelectType | null>(null);
+        
+        const [selected,setSelected] = useState<OptionType | null>(null);
 
         useEffect(()=>{
             
@@ -18,8 +19,12 @@ const Select = ({id,register,registerId,onSelect}:
             &&
             !!onSelect
             &&
-            onSelect(selected)
+            (()=>{
+               onSelect(selected) 
+            })()
+            
         },[selected])
+
 
   return (
     <div className="select-container">
@@ -38,9 +43,23 @@ const Select = ({id,register,registerId,onSelect}:
             })
         }}
         >
-            <option value="f4b77dbb-39b2-46e8-a9a7-e1e3f2302ff9">1</option>
-            <option value="f4b77dbb-39b2-46e8-a9a7-e1e3f2302ff9">2</option>
+
+            <option value=""></option>
+            {
+               !!options?.length
+                &&
+                options.map((option_item,option_index)=>
+                    <option 
+                    key={option_index}
+                    value={option_item.value}>
+                        {option_item.label}
+                    </option>
+                )
+            }
+            {/* <option value="f4b77dbb-39b2-46e8-a9a7-e1e3f2302ff9">1</option>
+            <option value="f4b77dbb-39b2-46e8-a9a7-e1e3f2302ff9">2</option> */}
         </select>
+  
     </div>
   )
 }

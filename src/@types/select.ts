@@ -1,6 +1,9 @@
 
-type SelectType = Record<'label'|'value',string>;
+type OptionType = Record<'label'|'value',string>;
+
+type SelectOptionType = OptionType[];
 
 export type {
-    SelectType
+    OptionType,
+    SelectOptionType
 }

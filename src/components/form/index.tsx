@@ -5,14 +5,15 @@ import z from "zod";
 import FormStructure from "../form-structure";
 import Dialog from "../dialog";
 import { useState } from "react";
-import type { DefaultFormValuesType, FormChangeFieldsType, FormMethodType } from "../../@types/form";
+import type { DefaultFormValuesType, FormChangeFieldsType, FormMethodType, FormSelectOptionType } from "../../@types/form";
 import Button from "../button";
 
 
-const Form = ({model,submit,defaultForm,changeFields}:
+const Form = ({model,submit,defaultForm,changeFields,defaultOptions}:
   {
     model:ModelType,
     defaultForm?:DefaultFormValuesType,
+    defaultOptions?:FormSelectOptionType | null,
     method:'post'|'put',
     submit:{
       title:string,
@@ -33,6 +34,7 @@ const Form = ({model,submit,defaultForm,changeFields}:
     const [coupledForm,setCoupledForm] = useState<{
       method:FormMethodType,
       model:ModelType,
+      defaultOptions?:FormSelectOptionType | null,
       defaultForm?:{
         values:DefaultFormValuesType,
         registerId?:string,
@@ -69,6 +71,7 @@ const Form = ({model,submit,defaultForm,changeFields}:
         method={coupledForm.method}
         model={coupledForm.model}
         defaultForm={coupledForm.defaultForm?.values}
+        defaultOptions={defaultOptions}
         submit={{
           title:
           (coupledForm.method === 'post'
@@ -109,8 +112,9 @@ const Form = ({model,submit,defaultForm,changeFields}:
         submit.onAction(data);
       })}>
       <FormStructure
+      defaultOptions={defaultOptions}
         changeFields={changeFields}
-        onCoupledForm={(model,fieldArray,method,changeFields,defaultForm,)=>{
+        onCoupledForm={(model,fieldArray,method,changeFields,defaultOptions,defaultForm)=>{
           setCoupledForm({
             model:model,
             method:method,
@@ -119,7 +123,9 @@ const Form = ({model,submit,defaultForm,changeFields}:
               index:defaultForm?.index,
               registerId:defaultForm?.registerId
             },
-            changeFields:changeFields
+            changeFields:changeFields,
+            defaultOptions:defaultOptions
+
           });
           setCoupledFieldArray(fieldArray)
           

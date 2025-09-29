@@ -1,10 +1,11 @@
 import type { UseFieldArrayReturn } from "react-hook-form"
 import FormField from "../form-field"
-import type { FormChangeFieldsType, FormFieldItemType, FormType } from "../../@types/form"
+import type { FormChangeFieldsType, FormFieldItemType, FormSelectOptionType, FormType } from "../../@types/form"
 import type { ZodObject } from "zod"
 import { onFindField } from "../../functions/field"
 import Button from "../button"
 import { onDefaultTypeofData } from "../../functions/output"
+import { useEffect } from "react"
 
 const FormFieldList = (
   {
@@ -15,7 +16,8 @@ const FormFieldList = (
     actions,
     formContent,
     fieldForm,
-    changeFields
+    changeFields,
+    defaultOptions
   }:{
     title:string,
     id:string,
@@ -24,10 +26,13 @@ const FormFieldList = (
     fieldSchema:ZodObject,
     fieldForm:FormType
     actions:UseFieldArrayReturn,
-    changeFields?:FormChangeFieldsType
+    changeFields?:FormChangeFieldsType,
+    defaultOptions?:FormSelectOptionType | null,
 }) => {
 
-
+  useEffect(()=>{
+      console.warn(defaultOptions)
+    },[defaultOptions])
   return (
     <div className="formFieldList">
       
@@ -44,17 +49,41 @@ const FormFieldList = (
                         Object.entries(fieldSchema.shape).map(
                         ([key,_])=>(
                         <FormField
+                        options={
+                          (()=>{
+                            const teste = defaultOptions?.find((field_option_item)=>
+
+                          {
+                            console.log(`${formContent.properties.registerId}.${field_index}.${field_option_item.registerId}`===`${formContent.properties.registerId}.${field_index}.${key}`)
+                            return `${formContent.properties.registerId}.${field_index}.${field_option_item.registerId}` === `${formContent.properties.registerId}.${field_index}.${key}`}
+                          
+                        )?.options
+                            return teste
+                          })()
+                      }
                         onSetValue={(value)=>{
                           const current_field = onFindField(fieldForm,key)
                           !!changeFields
                           &&
                           current_field.tag === 'input'
                           ? 
-                          changeFields.onInput && changeFields.onInput(value)
+                          changeFields.onInput && changeFields.onInput(
+                            current_field.changeWatch
+                            ?
+                            current_field.changeWatch?.onChange(value)
+                            :
+                            value
+                          )
                           :
                           current_field.tag === 'select'
                           &&
-                          changeFields?.onSelect && changeFields.onSelect(value)
+                          changeFields?.onSelect && changeFields.onSelect(
+                            current_field.changeWatch
+                            ?
+                            current_field.changeWatch?.onChange(value)
+                            :
+                            value
+                          )
                           
                           !!current_field.changeWatch
                           &&

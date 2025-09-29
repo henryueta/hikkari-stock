@@ -15,7 +15,7 @@ const api_endpoints = {
         post:api_base+"sale/post"
     },
     sale_product:{
-        get:api_base+"sale/product/get?product_id="
+        get:api_base+"sale/product/get"
     },
     sale_variation:{
         get:api_base+"sale/variation/get?product_id="

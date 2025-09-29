@@ -2,9 +2,8 @@ import type { FormFieldItemType } from "../../@types/form"
 import FormWarn from "../form-warn"
 import Select from "../select"
 
-const FormField = ({properties,register,warn,onSetValue}:FormFieldItemType
+const FormField = ({properties,register,warn,onSetValue,options}:FormFieldItemType
 ) => {
-
   return (
     <div className="formField">
         <label htmlFor={properties.id}>
@@ -34,6 +33,7 @@ const FormField = ({properties,register,warn,onSetValue}:FormFieldItemType
                 properties.tag === 'select'
                 &&
                 <Select
+                options={options}
                 id={properties.id}
                 register={register}
                 registerId={properties.registerId}
@@ -51,6 +51,9 @@ const FormField = ({properties,register,warn,onSetValue}:FormFieldItemType
             <FormWarn
                 message={warn}
             />
+        }
+        {
+            properties.registerId   
         }
     </div>
   )

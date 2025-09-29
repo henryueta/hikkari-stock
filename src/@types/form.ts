@@ -1,6 +1,7 @@
 import type { UseFormRegister } from "react-hook-form";
 import type { SchemaType } from "./schema";
 import type { TypeofOutput } from "./output";
+import type { SelectOptionType } from "./select";
 
 type FormItemFieldType = 'text'|'password'|'email'
 
@@ -29,6 +30,11 @@ Record<'type',FormItemFieldType>
         }[]
     }
 }
+&  
+{
+    queryOptionsUrl?:string
+}
+
 
 type FormType = FormItemType[];
 
@@ -47,10 +53,18 @@ interface FormFieldItemType {
     properties:FormItemType,
     register:UseFormRegisterType
     warn:string | null,
-    onSetValue?:(value:string)=>void
+    onSetValue?:(value:string)=>void,
+    options?:SelectOptionType | undefined
 }
 
 type FormFieldListType = FormFieldItemType[];
+
+type FormSelectType = {
+    registerId:string,
+    options:SelectOptionType
+}
+
+type FormSelectOptionType = FormSelectType[]
 
 export type {
     FormItemFieldType,
@@ -62,5 +76,7 @@ export type {
     DefaultFormValuesType,
     FormMethodType,
     UseFormRegisterType,
-    FormChangeFieldsType
+    FormChangeFieldsType,
+    FormSelectType,
+    FormSelectOptionType
 }
