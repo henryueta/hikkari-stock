@@ -25,6 +25,8 @@ const TableFormPage = () => {
     const [tableFieldOptions,setTableFieldOptions] = useState<FormSelectOptionType| null>(null);
     const [tableFieldNumbers,setTableFieldNumbers] = useState<FormFieldNumberListType | null>(null);
 
+    
+
     const {onRequest,onCreateCancelToken} = useHandleAxios();
     const {onGetToken} = useHandleToken();
     useEffect(()=>{
@@ -48,6 +50,7 @@ const TableFormPage = () => {
 
               setTableFieldNumbers(curret_result.map((result_item)=>{
                 return {
+                  registerId:result_item.name,
                   max:result_item.value
                 }
               }))
@@ -104,7 +107,11 @@ const TableFormPage = () => {
 
     },[tableQueryOptionsUrl])
 
+    useEffect(()=>{
 
+      console.error("nubers",tableFieldNumbers)
+
+    },[tableFieldNumbers])
 
 
   return (
@@ -121,11 +128,12 @@ const TableFormPage = () => {
         ?    
         <Form
         defaultOptions={tableFieldOptions}
+        numberFields={tableFieldNumbers}
         changeFields={{
           onSelect(value) {
             setTableQueryOptionsUrl(value)
           },
-          onInput(value) {
+          onInput() {
 
           },
         }}

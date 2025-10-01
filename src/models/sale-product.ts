@@ -4,11 +4,16 @@ import type { SchemaType } from "../@types/schema"
 import Model from "../classes/Model"
 import { sale_variation_model, sale_variation_schema } from "./sale-variation"
 import api_endpoints from "../config/api"
+import { default_array_validation, default_string_validation } from "../validation/default"
 
 const sale_product_schema:SchemaType = z.object({
     
-    product_id:z.string(),
-    variations_id:z.array(sale_variation_schema)
+    product_id:z.string().refine((val)=>
+        default_string_validation(val),
+        "Campo produto inválido"),
+    variations_id:z.array(sale_variation_schema).refine((val)=>
+        default_array_validation(val),
+        "Campo variações inválido")
 })
 
 const sale_product_form:FormType = [

@@ -5,15 +5,16 @@ import z from "zod";
 import FormStructure from "../form-structure";
 import Dialog from "../dialog";
 import { useState } from "react";
-import type { DefaultFormValuesType, FormChangeFieldsType, FormMethodType, FormSelectOptionType } from "../../@types/form";
+import type { DefaultFormValuesType, FormChangeFieldsType, FormFieldNumberListType, FormMethodType, FormSelectOptionType } from "../../@types/form";
 import Button from "../button";
 
 
-const Form = ({model,submit,defaultForm,changeFields,defaultOptions}:
+const Form = ({model,submit,defaultForm,changeFields,defaultOptions,numberFields}:
   {
     model:ModelType,
     defaultForm?:DefaultFormValuesType,
     defaultOptions?:FormSelectOptionType | null,
+    numberFields?:FormFieldNumberListType | null,
     method:'post'|'put',
     submit:{
       title:string,
@@ -72,13 +73,13 @@ const Form = ({model,submit,defaultForm,changeFields,defaultOptions}:
         model={coupledForm.model}
         defaultForm={coupledForm.defaultForm?.values}
         defaultOptions={defaultOptions}
+        numberFields={numberFields}
         submit={{
           title:
           (coupledForm.method === 'post'
           ? "Cadastrar"
           : "Editar"),
           onAction(data) {
-            console.log("enviado")
             !!coupledFieldArray
             &&
             (
@@ -113,6 +114,7 @@ const Form = ({model,submit,defaultForm,changeFields,defaultOptions}:
       })}>
       <FormStructure
       defaultOptions={defaultOptions}
+      numberFields={numberFields}
         changeFields={changeFields}
         onCoupledForm={(model,fieldArray,method,changeFields,defaultOptions,defaultForm)=>{
           setCoupledForm({

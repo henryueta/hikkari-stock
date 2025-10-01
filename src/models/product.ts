@@ -3,11 +3,21 @@ import type { SchemaType } from "../@types/schema";
 import type { FormType } from "../@types/form";
 import Model from "../classes/Model";
 import { variation_form, variation_schema } from "./variation";
+import { default_array_validation, default_string_validation } from "../validation/default";
 
 const product_schema:SchemaType = z.object({
-    description:z.string(),
-    cod:z.string(),
-    variations:z.array(variation_schema)
+    description:z.string().refine((val)=>
+        default_string_validation(val),
+        "Campo descrição inválido"
+    ),
+    cod:z.string().refine((val)=>
+        default_string_validation(val),
+        "Campo código inválido"
+    ),
+    variations:z.array(variation_schema).refine((val)=>
+        default_array_validation(val),
+        "Campo variações inválido"
+    )
 })
 
 

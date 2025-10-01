@@ -1,11 +1,11 @@
-import type { UseFormRegister } from "react-hook-form";
+import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import type { SchemaType } from "./schema";
 import type { TypeofOutput } from "./output";
 import type { SelectOptionType } from "./select";
 
 type FormFieldType = 'number' | 'option' | 'text'
 
-type FormItemFieldType = 'text'|'password'|'email'
+type FormItemFieldType = 'text'|'password'|'email'|'number'
 
 type FormItemTagType = 'input'|'textarea'|'select'|'form'|'dialog'
 
@@ -59,9 +59,10 @@ type FormChangeFieldsType = {
 interface FormFieldItemType {
     properties:FormItemType,
     register:UseFormRegisterType
-    warn:string | null,
+    warn:FieldErrors<Record<string, unknown>>| null,
     onSetValue?:(value:string)=>void,
-    options?:SelectOptionType | undefined
+    options?:SelectOptionType | undefined,
+    max?:number
 }
 
 type FormFieldListType = FormFieldItemType[];
@@ -72,6 +73,7 @@ type FormSelectType = {
 }
 
 type FormFieldNumberType = {
+    registerId:string,
     max:number,
 }
 

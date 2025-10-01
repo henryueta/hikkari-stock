@@ -2,7 +2,20 @@ import type { FormFieldItemType } from "../../@types/form"
 import FormWarn from "../form-warn"
 import Select from "../select"
 
-const FormField = ({properties,register,warn,onSetValue,options}:FormFieldItemType
+const FormField = (
+    {
+        properties,
+        register,
+        warn,
+        onSetValue,
+        options,
+        max
+    }
+    :Omit<FormFieldItemType,'warn'>
+    &
+    {
+        warn:string | null
+    }
 ) => {
   return (
     <div className="formField">
@@ -12,9 +25,31 @@ const FormField = ({properties,register,warn,onSetValue,options}:FormFieldItemTy
                 properties.tag === 'input'
                 ?
                 <input 
+                placeholder={
+                    properties.type === 'number'
+                    ? 
+                    (!!max
+                    ?
+                    "Máx: "+max.toString()
+                    :
+                    "")
+                    : ""
+                }
+                max={
+                    properties.type === 'number'
+                    ? 
+                    (!!max
+                    ?
+                    max.toString()
+                    :
+                    String(100))
+                    : ""
+                }
                 type={properties.type}
                 id={properties.id}
-                {...register(properties.registerId)}
+                {...register(properties.registerId,{
+                    valueAsNumber:(properties.type === 'number')
+                })}
                     onChange={(e)=>{
                     !!onSetValue
                     &&
@@ -51,9 +86,6 @@ const FormField = ({properties,register,warn,onSetValue,options}:FormFieldItemTy
             <FormWarn
                 message={warn}
             />
-        }
-        {
-            properties.registerId   
         }
     </div>
   )

@@ -1,14 +1,17 @@
 import z from "zod";
 import type { FormType } from "../@types/form";
 import Model from "../classes/Model";
+import { default_string_validation } from "../validation/default";
 
 const auth_schema = z.object({
-    username:z.string().refine((val)=>val.trim().length > 0,{
-        message:"Error"
-    }),
-    password:z.string().refine((val)=>val.trim().length > 0,{
-        message:"Error"
-    })
+    username:z.string().refine((val)=>
+        default_string_validation(val),
+        "Campo username inválido"
+    ),
+    password:z.string().refine((val)=>
+        default_string_validation(val),
+        "Campo senha inválido"
+    )
 });
 
 const auth_form:FormType = [

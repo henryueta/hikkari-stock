@@ -6,14 +6,25 @@ import FormField from "../form-field";
 import Button from "../button";
 import FormDataView from "../form-data-view";
 import { Fragment } from "react/jsx-runtime";
-import type { DefaultFormValuesType, FormChangeFieldsType, FormMethodType, FormSelectOptionType } from "../../@types/form";
+import type { DefaultFormValuesType, FormChangeFieldsType, FormFieldNumberListType, FormMethodType, FormSelectOptionType } from "../../@types/form";
 import { onFindField } from "../../functions/field";
 import { onDefaultTypeofData } from "../../functions/output";
 // import useHandleAxios from "../../hooks/useHandleAxios";
 // import useHandleToken from "../../hooks/useHandleToken";
 
 
-const FormStructure = ({model,control,register,errors,defaultOptions,onCoupledForm,onUpdateFields,changeFields}
+const FormStructure = (
+  {
+    model,
+    control,
+    register,
+    errors,
+    defaultOptions,
+    numberFields,
+    onCoupledForm,
+    onUpdateFields,
+    changeFields
+  }
     :{
         model:ModelType,
         control:Control,
@@ -22,6 +33,7 @@ const FormStructure = ({model,control,register,errors,defaultOptions,onCoupledFo
         changeFields?:FormChangeFieldsType,
         errors:FieldErrors<Record<string, unknown>>,
         defaultOptions?:FormSelectOptionType | null,
+        numberFields?:FormFieldNumberListType | null,
         onCoupledForm?:(
           model:ModelType,
           fieldArray:UseFieldArrayReturn<FieldValues>,
@@ -60,7 +72,7 @@ const FormStructure = ({model,control,register,errors,defaultOptions,onCoupledFo
 
     return model.form.map((field_item,field_index)=>
           {
-            
+            console.log("errors",errors[field_item.registerId])
             const field_schema = model.schema.shape[field_item.registerId];
             const fieldArrayActions = fieldArrays[field_item.registerId]
               if(field_schema instanceof z.ZodArray
@@ -71,6 +83,7 @@ const FormStructure = ({model,control,register,errors,defaultOptions,onCoupledFo
               ){
                 return (
                   <FormFieldList
+                  numberFields={numberFields}
                   defaultOptions={defaultOptions}
                   changeFields={changeFields}
                   key={field_item.registerId+field_index}
@@ -89,7 +102,7 @@ const FormStructure = ({model,control,register,errors,defaultOptions,onCoupledFo
                   formContent={{
                     properties:field_item,
                     register:register,
-                    warn:errors[field_item.registerId]?.message || null,
+                    warn:errors[field_item.registerId] || null,
                   }}
                   />
                 )
@@ -200,6 +213,11 @@ const FormStructure = ({model,control,register,errors,defaultOptions,onCoupledFo
 
             return (
             <FormField
+              max={
+                numberFields?.find((field_number_item=>
+                  field_number_item.registerId === field_item.registerId
+                ))?.max
+              }
               options={
                 defaultOptions?.find((field_option_item=>
                   field_option_item.registerId === field_item.registerId

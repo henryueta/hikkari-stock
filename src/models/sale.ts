@@ -4,11 +4,18 @@ import type { FormType } from "../@types/form";
 import { sale_product_model, sale_product_schema } from "./sale-product";
 import Model from "../classes/Model";
 import api_endpoints from "../config/api";
+import { default_array_validation, default_string_validation } from "../validation/default";
 
 
 const sale_schema:SchemaType = z.object({
-    client_name: z.string(),
-    products_id:z.array(sale_product_schema),
+    client_name: z.string().refine((val)=>
+        default_string_validation(val),
+        "Campo cliente inválido"
+    ),
+    products_id:z.array(sale_product_schema).refine((val)=>
+        default_array_validation(val),
+        "Campo produtos inválido"
+    ),
 })
 
 const sale_form:FormType = [

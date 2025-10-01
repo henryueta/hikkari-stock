@@ -3,12 +3,22 @@ import type { FormType } from "../@types/form";
 import Model from "../classes/Model"
 import type { SchemaType } from "../@types/schema";
 import api_endpoints from "../config/api";
+import { default_number_validation, default_string_validation } from "../validation/default";
 
 const sale_variation_schema:SchemaType = z.object({
 
-    variation_id:z.string(),
-    size_id:z.string(),
-    quantity:z.string()
+    variation_id:z.string().refine((val)=>
+        default_string_validation(val),
+        "Campo variação inválido"
+    ),
+    size_id:z.string().refine((val)=>
+        default_string_validation(val),
+        "Campo tamanho inválido"
+    ),
+    quantity:z.number().refine((val)=>
+        default_number_validation(val),
+        "Campo quantidade inválido"
+    )
 
 }) 
 
@@ -31,7 +41,7 @@ const sale_variation_form:FormType = [
                 },
                 {
                     registerId:"quantity",
-                    typeOfField:"string"
+                    typeOfField:"number"
                 }
             ]
         }
@@ -63,7 +73,7 @@ const sale_variation_form:FormType = [
         registerId:"quantity",
         tag:"input",
         title:"Quantidade",
-        type:"text"
+        type:"number"
     }
 ]
 

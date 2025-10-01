@@ -1,11 +1,10 @@
 import type { UseFieldArrayReturn } from "react-hook-form"
 import FormField from "../form-field"
-import type { FormChangeFieldsType, FormFieldItemType, FormSelectOptionType, FormType } from "../../@types/form"
+import type { FormChangeFieldsType, FormFieldItemType, FormFieldNumberListType, FormSelectOptionType, FormType } from "../../@types/form"
 import type { ZodObject } from "zod"
 import { onFindField } from "../../functions/field"
 import Button from "../button"
 import { onDefaultTypeofData } from "../../functions/output"
-import { useEffect } from "react"
 
 const FormFieldList = (
   {
@@ -17,7 +16,8 @@ const FormFieldList = (
     formContent,
     fieldForm,
     changeFields,
-    defaultOptions
+    defaultOptions,
+    numberFields
   }:{
     title:string,
     id:string,
@@ -28,11 +28,15 @@ const FormFieldList = (
     actions:UseFieldArrayReturn,
     changeFields?:FormChangeFieldsType,
     defaultOptions?:FormSelectOptionType | null,
+    numberFields?:FormFieldNumberListType | null
 }) => {
-
-  useEffect(()=>{
-      console.warn(defaultOptions)
-    },[defaultOptions])
+  console.log(
+    (formContent.warn
+    &&
+    formContent.warn[0])
+    &&
+    formContent.warn[0]
+  )
   return (
     <div className="formFieldList">
       
@@ -44,12 +48,20 @@ const FormFieldList = (
         {
             arrayFields.map((field_item,field_index)=>
                 {
+
                     return <div className="fieldListItemContainer" key={field_item.id}>
                     {
                         Object.entries(fieldSchema.shape).map(
                         ([key,_])=>(
                         <FormField
-                        
+                        max={
+                          (()=>{
+                            const current_fields_number = numberFields?.find((field_number_item)=>
+                            `${formContent.properties.registerId}.${field_index}.${field_number_item.registerId}` === `${formContent.properties.registerId}.${field_index}.${key}`
+                            )?.max
+                            return current_fields_number
+                          })()
+                        }
                         options={
                           (()=>{
                             const current_options = defaultOptions?.find((field_option_item)=>
@@ -151,10 +163,19 @@ const FormFieldList = (
                           title:onFindField(fieldForm,key).title,
                           id:`${formContent.properties.id} - ${key}`,
                           tag:onFindField(fieldForm,key).tag,
-                          type:formContent.properties.type,
+                          type:onFindField(fieldForm,key).type,
                           modelBody:formContent.properties.modelBody
                         }}
-                        warn={formContent.warn}
+                        warn={
+                          (formContent.warn
+                            &&
+                            formContent.warn[field_index]
+                            &&
+                            formContent.warn[field_index][key as 'root']
+                          ) 
+                          ? formContent.warn[field_index][key as "root"]!.message || ""
+                          : null
+                        }
                       />
                             )
                         )

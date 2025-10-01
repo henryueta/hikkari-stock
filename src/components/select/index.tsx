@@ -36,7 +36,6 @@ const Select = ({id,register,registerId,onSelect,options}:
         }
         {...register(registerId)}
         onChange={(e)=>{
-            console.log(e.target.value)
             setSelected({
                 label:"1",
                 value:e.target.value
