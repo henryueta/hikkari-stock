@@ -36,6 +36,10 @@ Record<'type',FormItemFieldType>
 }
 &  
 {
+    options?:SelectOptionType
+}   
+&
+{
     queryOptionsUrl?:string
 }
 &

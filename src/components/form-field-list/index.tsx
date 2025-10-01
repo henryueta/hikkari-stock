@@ -59,17 +59,26 @@ const FormFieldList = (
                             const current_fields_number = numberFields?.find((field_number_item)=>
                             `${formContent.properties.registerId}.${field_index}.${field_number_item.registerId}` === `${formContent.properties.registerId}.${field_index}.${key}`
                             )?.max
+                            
                             return current_fields_number
                           })()
                         }
                         options={
                           (()=>{
-                            const current_options = defaultOptions?.find((field_option_item)=>
+                            const current_options = 
+                            
+                            (
+                              !onFindField(fieldForm,key).options
+                              ?
+                              defaultOptions?.find((field_option_item)=>
+                                {
+                                return `${formContent.properties.registerId}.${field_index}.${field_option_item.registerId}` === `${formContent.properties.registerId}.${field_index}.${key}`
+                                }
+                              )?.options
+                              : 
+                              onFindField(fieldForm,key).options
+                            )
 
-                          {
-                            return `${formContent.properties.registerId}.${field_index}.${field_option_item.registerId}` === `${formContent.properties.registerId}.${field_index}.${key}`}
-                          
-                        )?.options
                             return current_options
                           })()
                       }
@@ -140,7 +149,7 @@ const FormFieldList = (
                           &&
                           !!current_field.changeWatch?.changeControl
                           &&
-                          current_field.changeWatch.changeFields.forEach((field_for_change)=>
+                          current_field.changeWatch.changeFields.forEach(()=>
                           {  
                             actions.update(field_index,
                               {...previus_data,
@@ -174,7 +183,7 @@ const FormFieldList = (
                             formContent.warn[field_index][key as 'root']
                           ) 
                           ? formContent.warn[field_index][key as "root"]!.message || ""
-                          : null
+                          : null 
                         }
                       />
                             )

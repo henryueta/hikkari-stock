@@ -219,9 +219,11 @@ const FormStructure = (
                 ))?.max
               }
               options={
-                defaultOptions?.find((field_option_item=>
+                !field_item.options
+                ? defaultOptions?.find((field_option_item=>
                   field_option_item.registerId === field_item.registerId
                 ))?.options
+                : field_item.options
               }
               onSetValue={(value)=>{
 

@@ -87,6 +87,9 @@ const FormField = (
                 message={warn}
             />
         }
+        {
+            properties.registerId
+        }
     </div>
   )
 }
