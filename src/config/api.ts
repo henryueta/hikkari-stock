@@ -20,8 +20,11 @@ const api_endpoints = {
     sale_variation:{
         get:api_base+"sale/variation/get?product_id="
     },
-    sale_size:{
-        get:api_base+"sale/size/get?variation_id="
+    sale_variation_size:{
+        get:api_base+"sale/variation/size/get?variation_id="
+    },
+    sale_size_quantity:{
+        get:api_base+"sale/size/quantity/get?size_id="
     }
 
 }

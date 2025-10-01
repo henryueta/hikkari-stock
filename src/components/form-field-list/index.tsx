@@ -49,16 +49,16 @@ const FormFieldList = (
                         Object.entries(fieldSchema.shape).map(
                         ([key,_])=>(
                         <FormField
+                        
                         options={
                           (()=>{
-                            const teste = defaultOptions?.find((field_option_item)=>
+                            const current_options = defaultOptions?.find((field_option_item)=>
 
                           {
-                            console.log(`${formContent.properties.registerId}.${field_index}.${field_option_item.registerId}`===`${formContent.properties.registerId}.${field_index}.${key}`)
                             return `${formContent.properties.registerId}.${field_index}.${field_option_item.registerId}` === `${formContent.properties.registerId}.${field_index}.${key}`}
                           
                         )?.options
-                            return teste
+                            return current_options
                           })()
                       }
                         onSetValue={(value)=>{
@@ -94,7 +94,34 @@ const FormFieldList = (
                             ||
                             value
                           )
-                          
+                          const previus_data = (
+                            (!!current_field.changeWatch
+                            &&
+                            !!current_field.changeWatch.noChangeFields)
+                            ?
+                            Object.fromEntries((Object.entries(actions.fields[field_index]).filter((action_field_item)=>
+
+                              current_field.changeWatch?.noChangeFields?.includes(action_field_item[0])
+
+                            )).map((action_field_item)=>[action_field_item[0],action_field_item[1]]))
+                            :
+                            actions.fields[field_index]
+                          );
+
+                          const field_for_change_list = 
+                          (!!current_field.changeWatch
+                          &&
+                          !!current_field.changeWatch.changeFields
+                          &&
+                          !!current_field.changeWatch?.changeControl)
+                          ?
+                          Object.fromEntries(current_field.changeWatch.changeFields.map((item)=>{
+                            return [item.registerId,onDefaultTypeofData(item.typeOfField)]
+                          }))
+                          :
+                          actions.fields[field_index]
+                         
+
                           !!current_field.changeWatch
                           &&
                           !!current_field.changeWatch.changeFields
@@ -102,16 +129,19 @@ const FormFieldList = (
                           !!current_field.changeWatch?.changeControl
                           &&
                           current_field.changeWatch.changeFields.forEach((field_for_change)=>
-                          {
+                          {  
                             actions.update(field_index,
-                              {
+                              {...previus_data,
                               [key]:value,
-                              [field_for_change.registerId]:onDefaultTypeofData(field_for_change.typeOfField)
+                              ...field_for_change_list
                               }
                             )
                           }
+                                                    
+                          );
+
                           
-                          )
+
 
                         }}
                         register={formContent.register}

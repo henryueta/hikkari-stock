@@ -22,12 +22,12 @@ const sale_variation_form:FormType = [
         changeWatch:{
             changeControl:true,
             onChange(value) {
-                return api_endpoints.sale_size.get+value
+                return api_endpoints.sale_variation_size.get+value
             },
             changeFields:[
                 {
                     registerId:"size_id",
-                    typeOfField:"object"
+                    typeOfField:"string"
                 },
                 {
                     registerId:"quantity",
@@ -43,7 +43,19 @@ const sale_variation_form:FormType = [
         title:"Tamanho",
         type:"text",
         changeWatch:{
-            changeControl:false
+            changeControl:true,
+            onChange(value) {
+                return api_endpoints.sale_size_quantity.get+value
+            },
+            changeFields:[
+                {
+                    registerId:"quantity",
+                    typeOfField:"string"
+                }
+            ],
+            noChangeFields:[
+                "variation_id"
+            ]
         }
     },
     {

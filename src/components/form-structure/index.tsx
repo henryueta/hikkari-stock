@@ -242,9 +242,11 @@ const FormStructure = ({model,control,register,errors,defaultOptions,onCoupledFo
                 field_item.changeWatch.changeFields
                 &&
                 field_item.changeWatch.changeFields.forEach((field_for_change)=>
-                    onUpdateFields(field_for_change.registerId,(
+                    {
+                      onUpdateFields(field_for_change.registerId,(
                       onDefaultTypeofData(field_for_change.typeOfField)
                     ))
+                  }
                 )
                 
               }}

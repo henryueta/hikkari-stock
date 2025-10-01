@@ -3,6 +3,8 @@ import type { SchemaType } from "./schema";
 import type { TypeofOutput } from "./output";
 import type { SelectOptionType } from "./select";
 
+type FormFieldType = 'number' | 'option' | 'text'
+
 type FormItemFieldType = 'text'|'password'|'email'
 
 type FormItemTagType = 'input'|'textarea'|'select'|'form'|'dialog'
@@ -28,7 +30,8 @@ Record<'type',FormItemFieldType>
         changeFields?:{
             registerId:string,
             typeOfField:TypeofOutput
-        }[]
+        }[],
+        noChangeFields?:string[]
     }
 }
 &  
@@ -68,7 +71,13 @@ type FormSelectType = {
     options:SelectOptionType
 }
 
+type FormFieldNumberType = {
+    max:number,
+}
+
 type FormSelectOptionType = FormSelectType[]
+
+type FormFieldNumberListType = FormFieldNumberType[]
 
 export type {
     FormItemFieldType,
@@ -82,5 +91,8 @@ export type {
     UseFormRegisterType,
     FormChangeFieldsType,
     FormSelectType,
-    FormSelectOptionType
+    FormSelectOptionType,
+    FormFieldType,
+    FormFieldNumberType,
+    FormFieldNumberListType
 }

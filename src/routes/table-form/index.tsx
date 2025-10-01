@@ -8,7 +8,7 @@ import type { TableDataType } from "../../@types/table";
 import useHandleAxios from "../../hooks/useHandleAxios";
 import useHandleToken from "../../hooks/useHandleToken";
 import type { SelectOptionType } from "../../@types/select";
-import type { FormSelectOptionType } from "../../@types/form";
+import { type FormFieldNumberListType, type FormFieldType, type FormSelectOptionType } from "../../@types/form";
 
 const TableFormPage = () => {
 
@@ -22,7 +22,8 @@ const TableFormPage = () => {
         table_config_item.name === table
       )?.queryOptionsUrl
     );
-    const [tableFormOptions,setTableFormOptions] = useState<FormSelectOptionType| null>(null);
+    const [tableFieldOptions,setTableFieldOptions] = useState<FormSelectOptionType| null>(null);
+    const [tableFieldNumbers,setTableFieldNumbers] = useState<FormFieldNumberListType | null>(null);
 
     const {onRequest,onCreateCancelToken} = useHandleAxios();
     const {onGetToken} = useHandleToken();
@@ -38,45 +39,61 @@ const TableFormPage = () => {
         },{
           onThen(result) {
             const curret_result = result.data as {
+            field_type:FormFieldType,
             name:string,
-            options:SelectOptionType
+            value:SelectOptionType | number | any
           }[]
-          console.error(result.data)
-            setTableFormOptions(
-              ((prev)=>{
-                const current_form_option = curret_result.map((item)=>{
-                  return {
-                    registerId:item.name,
-                    options:item.options
-                  }
-                })
 
-                if(!!prev){
-                  let formated_prev_list = prev;
+            if(curret_result.find((result_item)=>result_item.field_type === 'number')){
 
-                  const prev_register_list = new Set(
-                    prev.map((option_item)=>option_item.registerId)
-                  );
-                  const form_option_register_list = new Set(
-                    current_form_option.map((option_item)=>option_item.registerId)
-                  );
-
-                  for(let registerId of prev_register_list){
-                    if(form_option_register_list.has(registerId)){
-                      
-                      formated_prev_list = formated_prev_list.filter((prev_item)=>
-                        prev_item.registerId !== registerId
-                      )
-
-                    }
-                  }
-
-                  return [...formated_prev_list,...current_form_option]
+              setTableFieldNumbers(curret_result.map((result_item)=>{
+                return {
+                  max:result_item.value
                 }
-                return current_form_option
+              }))
 
-              })
-            )
+            }
+
+            if(curret_result.find((result_item)=>result_item.field_type === 'option')){
+              setTableFieldOptions(
+                ((prev)=>{
+
+                  const current_form_option = curret_result
+                  .filter((option_item)=>typeof option_item !== 'number')
+                  .map((option_item)=>{
+                    return {
+                      registerId:option_item.name,
+                      options:option_item.value
+                    }
+                  })
+
+                  if(!!prev){
+                    let formated_prev_list = prev;
+
+                    const prev_register_list = new Set(
+                      prev.map((option_item)=>option_item.registerId)
+                    );
+                    const form_option_register_list = new Set(
+                      current_form_option.map((option_item)=>option_item.registerId)
+                    );
+
+                    for(let registerId of prev_register_list){
+                      if(form_option_register_list.has(registerId)){
+                        
+                        formated_prev_list = formated_prev_list.filter((prev_item)=>
+                          prev_item.registerId !== registerId
+                        )
+
+                      }
+                    }
+
+                    return [...formated_prev_list,...current_form_option]
+                  }
+                  return current_form_option
+
+                })
+              )
+            }
           },
           onCatch(error) {
             console.log(error)
@@ -97,13 +114,13 @@ const TableFormPage = () => {
         &&
         !!(tableModel && !!(type === 'post' || type === 'put'))
         &&
-        !!(tableQueryOptionsUrl !== undefined && tableFormOptions !== null
+        !!(tableQueryOptionsUrl !== undefined && tableFieldOptions !== null
           ||
           tableQueryOptionsUrl === null
         )
         ?    
         <Form
-        defaultOptions={tableFormOptions}
+        defaultOptions={tableFieldOptions}
         changeFields={{
           onSelect(value) {
             setTableQueryOptionsUrl(value)
