@@ -22,6 +22,13 @@ const router_list = createBrowserRouter([
     <Private>
       <TableFormPage/>
     </Private>
+  },
+  {
+    path:"/:table/:type/:id",
+    element:
+      <Private>
+      <TableFormPage/>
+    </Private>
   }
 ])
 

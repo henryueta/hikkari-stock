@@ -26,7 +26,7 @@ Record<'type',FormItemFieldType>
 {
     changeWatch?:{
         changeControl:boolean
-        onChange?:(value:string)=>string,
+        onChange?:(value:string,index?:number)=>string,
         changeFields?:{
             registerId:string,
             typeOfField:TypeofOutput
@@ -56,8 +56,8 @@ type UseFormRegisterType= UseFormRegister<Record<string, unknown>>;
 type FormMethodType = 'put' | 'post';
 
 type FormChangeFieldsType = {
-    onInput?:(value:string)=>void,
-    onSelect?:(value:string)=>void
+    onInput?:(value:string,index?:number)=>void,
+    onSelect?:(value:string,index?:number)=>void
 }
 
 interface FormFieldItemType {
@@ -73,10 +73,12 @@ type FormFieldListType = FormFieldItemType[];
 
 type FormSelectType = {
     registerId:string,
-    options:SelectOptionType
+    options:SelectOptionType,
+    index:number
 }
 
 type FormFieldNumberType = {
+    index:number,
     registerId:string,
     max:number,
 }

@@ -31,8 +31,8 @@ const sale_variation_form:FormType = [
         type:"text",
         changeWatch:{
             changeControl:true,
-            onChange(value) {
-                return api_endpoints.sale_variation_size.get+value
+            onChange(value,index) {
+                return api_endpoints.sale_variation_size.get+value+"&index="+index
             },
             changeFields:[
                 {
@@ -54,8 +54,8 @@ const sale_variation_form:FormType = [
         type:"text",
         changeWatch:{
             changeControl:true,
-            onChange(value) {
-                return api_endpoints.sale_size_quantity.get+value
+            onChange(value,index) {
+                return api_endpoints.sale_size_quantity.get+value+"&index="+index
             },
             changeFields:[
                 {

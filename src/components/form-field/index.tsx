@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react"
 import type { FormFieldItemType } from "../../@types/form"
 import FormWarn from "../form-warn"
 import Select from "../select"
+import type { SelectOptionType } from "../../@types/select"
 
 const FormField = (
     {
@@ -17,6 +19,33 @@ const FormField = (
         warn:string | null
     }
 ) => {
+
+    const [numberMax,setNumberMax] = useState<string | null>(
+        (!!max
+        ?
+        "Máx: "+max.toString()
+        :
+        "")            
+    );
+
+    useEffect(()=>{
+
+        setNumberMax((prev)=>{
+            if(!!max){
+                return max.toString()
+            }
+            return prev
+        })
+
+    },[max])
+    const [selectOptions,setSelectOptions] = useState<SelectOptionType | undefined>(options);
+    
+    useEffect(()=>{
+        if(!!options){
+            setSelectOptions(options)
+        }
+    },[options])
+
   return (
     <div className="formField">
         <label htmlFor={properties.id}>
@@ -28,21 +57,21 @@ const FormField = (
                 placeholder={
                     properties.type === 'number'
                     ? 
-                    (!!max
+                    !!numberMax
                     ?
-                    "Máx: "+max.toString()
+                    "Máx: "+numberMax
                     :
-                    "")
+                    "Máx:. . ."
                     : ""
                 }
                 max={
                     properties.type === 'number'
                     ? 
-                    (!!max
+                    !!numberMax
                     ?
-                    max.toString()
+                    numberMax
                     :
-                    String(100))
+                    "0"
                     : ""
                 }
                 type={properties.type}
@@ -67,8 +96,9 @@ const FormField = (
                 : 
                 properties.tag === 'select'
                 &&
+                (
                 <Select
-                options={options}
+                options={selectOptions}
                 id={properties.id}
                 register={register}
                 registerId={properties.registerId}
@@ -77,7 +107,7 @@ const FormField = (
                     &&
                     onSetValue(selected.value);
                 }}
-                />       
+                />) 
             }
         </label>
         {

@@ -57,10 +57,12 @@ const FormFieldList = (
                         max={
                           (()=>{
                             const current_fields_number = numberFields?.find((field_number_item)=>
-                            `${formContent.properties.registerId}.${field_index}.${field_number_item.registerId}` === `${formContent.properties.registerId}.${field_index}.${key}`
+                            !!(`${formContent.properties.registerId}.${field_index}.${field_number_item.registerId}` === `${formContent.properties.registerId}.${field_index}.${key}`
+                              &&
+                              field_number_item.index === field_index)
                             )?.max
-                            
                             return current_fields_number
+
                           })()
                         }
                         options={
@@ -71,9 +73,14 @@ const FormFieldList = (
                               !onFindField(fieldForm,key).options
                               ?
                               defaultOptions?.find((field_option_item)=>
-                                {
-                                return `${formContent.properties.registerId}.${field_index}.${field_option_item.registerId}` === `${formContent.properties.registerId}.${field_index}.${key}`
-                                }
+                                `${formContent.properties.registerId}.${field_index}.${field_option_item.registerId}` === `${formContent.properties.registerId}.${field_index}.${key}`
+                                &&
+                                (!!field_option_item.index 
+                                ? field_option_item.index === field_index
+                                :
+                                true
+                              )
+                                
                               )?.options
                               : 
                               onFindField(fieldForm,key).options
@@ -96,7 +103,7 @@ const FormFieldList = (
                             (
                             !!current_field.changeWatch.onChange
                             &&
-                            current_field.changeWatch.onChange(value))
+                            current_field.changeWatch.onChange(value,field_index))
                             ||
                             value
                           )
@@ -111,7 +118,7 @@ const FormFieldList = (
                             (
                             !!current_field.changeWatch.onChange
                             &&
-                            current_field.changeWatch.onChange(value))
+                            current_field.changeWatch.onChange(value,field_index))
                             ||
                             value
                           )

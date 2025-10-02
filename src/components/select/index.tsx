@@ -2,32 +2,36 @@ import { useEffect, useState } from "react"
 import type { UseFormRegisterType } from "../../@types/form"
 import type { OptionType, SelectOptionType } from "../../@types/select"
 
-const Select = ({id,register,registerId,onSelect,options}:
+const Select = ({id,register,registerId,onSelect,options,selected}:
     {
         id?:string,
         register:UseFormRegisterType,
         registerId:string,
         onSelect?:(selected:OptionType)=>void,
-        options?:SelectOptionType
+        options?:SelectOptionType,
+        selected?:OptionType | null
     }) => {
         
-        const [selected,setSelected] = useState<OptionType | null>(null);
+        const [optionSelected,setOptionSelected] = useState<OptionType | null>((
+            !!selected
+            ? selected
+            : null
+        ));
 
         useEffect(()=>{
-            
-            !!selected
+            !!optionSelected
             &&
             !!onSelect
             &&
             (()=>{
-               onSelect(selected) 
+               onSelect(optionSelected) 
             })()
-            
-        },[selected])
+        },[optionSelected])
 
 
   return (
     <div className="select-container">
+
         <select
          id={
             !!id
@@ -36,8 +40,8 @@ const Select = ({id,register,registerId,onSelect,options}:
         }
         {...register(registerId)}
         onChange={(e)=>{
-            setSelected({
-                label:"1",
+            setOptionSelected({
+                label:options?.find((item)=>item.value === e.target.value)?.label || "",
                 value:e.target.value
             })
         }}
@@ -58,7 +62,7 @@ const Select = ({id,register,registerId,onSelect,options}:
             {/* <option value="f4b77dbb-39b2-46e8-a9a7-e1e3f2302ff9">1</option>
             <option value="f4b77dbb-39b2-46e8-a9a7-e1e3f2302ff9">2</option> */}
         </select>
-  
+        
     </div>
   )
 }
