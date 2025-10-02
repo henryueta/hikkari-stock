@@ -29,7 +29,7 @@ const Form = ({model,submit,defaultForm,changeFields,defaultOptions,numberFields
       resolver:zodResolver(model.schema),
       defaultValues:defaultForm
     });
-
+    console.log(defaultForm)
     const {register,formState,control,handleSubmit,setValue} = form_methods;
     const {errors} = formState;
     const [coupledForm,setCoupledForm] = useState<{

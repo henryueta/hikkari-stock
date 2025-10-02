@@ -7,15 +7,21 @@ import { variation_model } from "../models/variation"
 const table_form_config = [
     {
         name:'variation',
-        queryOptionsUrl:null
+        postOptionsUrl:null,
+        putOptionsUrl:null,
+        queryDefaultValues:""
     },
     {
         name:'product',
-        queryOptionsUrl:null
+        postOptionsUrl:null,
+        putOptionsUrl:null,
+        queryDefaultValues:api_endpoints.product.get_by_id
     },
     {
         name:'sale',
-        queryOptionsUrl:api_endpoints.sale_product.get
+        postOptionsUrl:api_endpoints.sale_product.get,
+        putOptionsUrl:api_endpoints.sale_product.get_by_id,
+        queryDefaultValues:api_endpoints.sale.get_by_id
     }
 ]
 

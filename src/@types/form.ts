@@ -40,7 +40,7 @@ Record<'type',FormItemFieldType>
 }   
 &
 {
-    queryOptionsUrl?:string
+    postOptionsUrl?:string
 }
 &
 {

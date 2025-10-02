@@ -4,7 +4,7 @@ import { endpoint_type_list } from "../objects/endpoint"
 import useHandleAxios from "./useHandleAxios"
 import type { TableBodyType } from "../@types/table";
 import useHandleToken from "./useHandleToken";
-import type { FormFieldNumberListType, FormFieldType, FormSelectOptionType } from "../@types/form";
+import type { DefaultFormValuesType, FormFieldNumberListType, FormFieldType, FormSelectOptionType } from "../@types/form";
 import type { SelectOptionType } from "../@types/select";
 import { table_form_config } from "../objects/table";
 
@@ -48,11 +48,28 @@ const useHandleTable = ()=>{
 
     const [tableFieldNumbers,setTableFieldNumbers] = useState<FormFieldNumberListType | null>(null);
     const [tableFieldOptions,setTableFieldOptions] = useState<FormSelectOptionType| null>(null);
+    const [tableDefaultValues,setTableDefaultValues] = useState<DefaultFormValuesType | null>(null);
 
-    const onGetTableFieldOptions = (table:string | undefined)=>{
-        setTableQueryOptionsUrl(table_form_config.find((table_config_item)=>
-        table_config_item.name === table
-        )?.queryOptionsUrl)
+    const onGetTableFieldOptions = (table:string | undefined,id?:string)=>{
+
+      const current_table =  table_form_config.find((table_config_item)=>
+          table_config_item.name === table
+        )
+      
+        if(current_table && id){
+
+          const current_url = (
+            !!id
+            ? 'putOptionsUrl'
+            : 'postOptionsUrl'
+          )
+
+
+          setTableQueryOptionsUrl(
+            current_table[current_url]+id
+          )
+        }
+
     }
 
     const onCreateTableForm = ()=>{
@@ -136,6 +153,35 @@ const useHandleTable = ()=>{
           }
 
     }
+      
+    const onDefaultValues = (table:string | undefined,id:string)=>{
+
+        const table_url = (table_form_config.find((table_config_item)=>
+          table_config_item.name === table
+          )?.queryDefaultValues)
+
+          if(!table_url){
+              return 
+          }
+
+        onRequest({
+          url:table_url+id,
+          params:{
+            token:onGetToken()
+          },
+          method:"get",
+          cancelToken:onCreateCancelToken()
+        },{
+          onThen(result) {
+            const current_result = result.data as {};
+            setTableDefaultValues(current_result)
+          },
+          onCatch(error) {
+            console.log(error)
+          },
+        })
+
+    }
 
         // useEffect(()=>{
 
@@ -152,6 +198,8 @@ const useHandleTable = ()=>{
         tableFieldNumbers,
         tableQueryOptionsUrl,
         setTableQueryOptionsUrl,
+        onDefaultValues,
+        tableDefaultValues,
         tableBody
     }
 

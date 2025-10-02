@@ -170,9 +170,9 @@ const FormStructure = (
                   //   field_item.registerId
                   // )
 
-                  // if(current_field.queryOptionsUrl){
+                  // if(current_field.postOptionsUrl){
                   //   return onRequest({
-                  //   url:current_field.queryOptionsUrl,
+                  //   url:current_field.postOptionsUrl,
                   //   method:"get",
                   //   params:{
                   //     token:onGetToken()

@@ -51,7 +51,7 @@ const sale_form:FormType = [
         title:"Produtos",
         type:"text",
         modelBody:sale_product_model,
-        queryOptionsUrl:api_endpoints.sale_product.get
+        postOptionsUrl:api_endpoints.sale_product.get
     }
 ]
 

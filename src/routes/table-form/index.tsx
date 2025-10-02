@@ -1,14 +1,12 @@
 import { useParams } from "react-router-dom"
 import Form from "../../components/form";
-import { table_data_list, table_form_config } from "../../objects/table";
+import { table_data_list } from "../../objects/table";
 import { useEffect, useState } from "react";
 import type { ModelType } from "../../@types/model";
 import api_endpoints from "../../config/api";
 import type { TableDataType } from "../../@types/table";
 import useHandleAxios from "../../hooks/useHandleAxios";
 import useHandleToken from "../../hooks/useHandleToken";
-import type { SelectOptionType } from "../../@types/select";
-import { type FormFieldNumberListType, type FormFieldType, type FormSelectOptionType } from "../../@types/form";
 import useHandleTable from "../../hooks/useHandleTable";
 
 const TableFormPage = () => {
@@ -26,13 +24,15 @@ const TableFormPage = () => {
       tableFieldOptions,
       tableFieldNumbers,
       onGetTableFieldOptions,
+      onDefaultValues,
+      tableDefaultValues
     } = useHandleTable();
 
       useEffect(()=>{
 
         (!!table && !!type)
         &&
-        onGetTableFieldOptions(table)
+        onGetTableFieldOptions(table,id)
 
       },[])
 
@@ -47,18 +47,20 @@ const TableFormPage = () => {
     // const [tableQueryOptionsUrl,setTableQueryOptionsUrl] = useState<string | null | undefined>(
     //   table_form_config.find((table_config_item)=>
     //     table_config_item.name === table
-    //   )?.queryOptionsUrl
+    //   )?.postOptionsUrl
     //);
-    const [tableDefaultValues,setTableDefaultValues] = useState<object | null>(null);
     // const [tableFieldOptions,setTableFieldOptions] = useState<FormSelectOptionType| null>(null);
     // const [tableFieldNumbers,setTableFieldNumbers] = useState<FormFieldNumberListType | null>(null);
 
     useEffect(()=>{
 
-      !!id
-      
+        !!id
+        &&
+        type === 'put'
+        &&
+        onDefaultValues(table,id)
 
-    },[id])
+    },[id,type])
 
     const {onRequest,onCreateCancelToken} = useHandleAxios();
     const {onGetToken} = useHandleToken();
@@ -154,8 +156,11 @@ const TableFormPage = () => {
           ||
           tableQueryOptionsUrl === null
         )
-        ?    
+        ? 
+        (type === 'post' || (type === 'put' && id && !!tableDefaultValues))
+        &&   
         <Form
+        defaultForm={!!tableDefaultValues ? tableDefaultValues : {}}
         defaultOptions={tableFieldOptions}
         numberFields={tableFieldNumbers}
         changeFields={{
