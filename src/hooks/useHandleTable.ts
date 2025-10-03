@@ -49,25 +49,27 @@ const useHandleTable = ()=>{
     const [tableFieldNumbers,setTableFieldNumbers] = useState<FormFieldNumberListType | null>(null);
     const [tableFieldOptions,setTableFieldOptions] = useState<FormSelectOptionType| null>(null);
     const [tableDefaultValues,setTableDefaultValues] = useState<DefaultFormValuesType | null>(null);
-
     const onGetTableFieldOptions = (table:string | undefined,id?:string)=>{
-
       const current_table =  table_form_config.find((table_config_item)=>
           table_config_item.name === table
         )
       
-        if(current_table && id){
+        if(current_table && (current_table.postOptionsUrl || current_table.putOptionsUrl)){
 
           const current_url = (
             !!id
             ? 'putOptionsUrl'
             : 'postOptionsUrl'
           )
-
-
+          
           setTableQueryOptionsUrl(
-            current_table[current_url]+id
+            current_table[current_url]+(
+              !!id
+              ? id
+              : ""
+            )
           )
+
         }
 
     }

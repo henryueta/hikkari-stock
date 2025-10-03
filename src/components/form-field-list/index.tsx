@@ -211,7 +211,9 @@ const FormFieldList = (
         title={"Adicionar "+title.toLocaleLowerCase()}
         onClick={() =>
         {
-            actions.append({}) 
+            actions.append({
+              name:"",quantity:""
+            }) 
         }
         }
         />

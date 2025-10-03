@@ -6,6 +6,7 @@ import { size_form, size_schema } from "./size";
 import { default_array_validation, default_string_validation } from "../validation/default";
 
 const variation_schema:SchemaType = z.object({
+    identifier:z.string(),
     name:z.string().refine((val)=>
         default_string_validation(val),
         "Campo nome inválido"
@@ -17,6 +18,13 @@ const variation_schema:SchemaType = z.object({
 })
 
 const variation_form:FormType = [
+    {
+        id:"identifier_id",
+        registerId:"identifier",
+        tag:"input",
+        title:"",
+        type:"hidden",
+    },
     {
         id:"name_id",
         registerId:"name",

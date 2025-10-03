@@ -189,8 +189,14 @@ const TableFormPage = () => {
                 table_type_item === table
               );
               if(!!table_type){
+                const current_url_params = (
+                  !!id
+                  ? id+"&token="
+                  : "?token="
+                )+ onGetToken();
+                
                  onRequest({
-                  url:api_endpoints[table_type].post+"?token="+onGetToken(),
+                  url:api_endpoints[table_type][type]+current_url_params,
                   method:type,
                   data:{
                     data:data

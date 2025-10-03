@@ -27,7 +27,7 @@ const Form = ({model,submit,defaultForm,changeFields,defaultOptions,numberFields
       mode:"all",
       reValidateMode:"onChange",
       resolver:zodResolver(model.schema),
-      defaultValues:defaultForm
+      defaultValues:defaultForm,
     });
     console.log(defaultForm)
     const {register,formState,control,handleSubmit,setValue} = form_methods;

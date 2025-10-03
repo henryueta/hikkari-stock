@@ -5,7 +5,7 @@ import type { SelectOptionType } from "./select";
 
 type FormFieldType = 'number' | 'option' | 'text'
 
-type FormItemFieldType = 'text'|'password'|'email'|'number'
+type FormItemFieldType = 'text'|'password'|'email'|'number'|'hidden'
 
 type FormItemTagType = 'input'|'textarea'|'select'|'form'|'dialog'
 

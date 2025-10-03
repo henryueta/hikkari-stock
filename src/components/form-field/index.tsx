@@ -71,7 +71,7 @@ const FormField = (
                     ?
                     numberMax
                     :
-                    "0"
+                    "100"
                     : ""
                 }
                 type={properties.type}
